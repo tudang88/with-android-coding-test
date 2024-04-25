@@ -1,0 +1,122 @@
+[
+    {
+        "id": 1,
+        "photo": "https://raw.githubusercontent.com/withjp-inc/with_android_coding_test/main/assets/monster01.png",
+        "nickname": "緑のたぬ"
+    },
+    {
+        "id": 2,
+        "photo": "https://raw.githubusercontent.com/withjp-inc/with_android_coding_test/main/assets/monster02.png",
+        "nickname": "太陽"
+    },
+    {
+        "id": 3,
+        "photo": "https://raw.githubusercontent.com/withjp-inc/with_android_coding_test/main/assets/monster03.png",
+        "nickname": "目が五つ"
+    },
+    {
+        "id": 4,
+        "photo": "https://raw.githubusercontent.com/withjp-inc/with_android_coding_test/main/assets/monster04.png",
+        "nickname": "右回り"
+    },
+    {
+        "id": 5,
+        "photo": "https://raw.githubusercontent.com/withjp-inc/with_android_coding_test/main/assets/monster05.png",
+        "nickname": "天使"
+    },
+    {
+        "id": 6,
+        "photo": "https://raw.githubusercontent.com/withjp-inc/with_android_coding_test/main/assets/monster06.png",
+        "nickname": "ドロドロ"
+    },
+    {
+        "id": 7,
+        "photo": "https://raw.githubusercontent.com/withjp-inc/with_android_coding_test/main/assets/monster07.png",
+        "nickname": "ホビー"
+    },
+    {
+        "id": 8,
+        "photo": "https://raw.githubusercontent.com/withjp-inc/with_android_coding_test/main/assets/monster08.png",
+        "nickname": "悩みます"
+    },
+    {
+        "id": 9,
+        "photo": "https://raw.githubusercontent.com/withjp-inc/with_android_coding_test/main/assets/monster09.png",
+        "nickname": "クワガタくん"
+    },
+    {
+        "id": 10,
+        "photo": "https://raw.githubusercontent.com/withjp-inc/with_android_coding_test/main/assets/monster10.png",
+        "nickname": "寝癖"
+    },
+    {
+        "id": 11,
+        "photo": "https://raw.githubusercontent.com/withjp-inc/with_android_coding_test/main/assets/monster11.png",
+        "nickname": "えっ？私？"
+    },
+    {
+        "id": 12,
+        "photo": "https://raw.githubusercontent.com/withjp-inc/with_android_coding_test/main/assets/monster12.png",
+        "nickname": "笑えない"
+    },
+    {
+        "id": 13,
+        "photo": "https://raw.githubusercontent.com/withjp-inc/with_android_coding_test/main/assets/monster01.png",
+        "nickname": "緑のたぬ"
+    },
+    {
+        "id": 14,
+        "photo": "https://raw.githubusercontent.com/withjp-inc/with_android_coding_test/main/assets/monster02.png",
+        "nickname": "太陽"
+    },
+    {
+        "id": 15,
+        "photo": "https://raw.githubusercontent.com/withjp-inc/with_android_coding_test/main/assets/monster03.png",
+        "nickname": "目が五つ"
+    },
+    {
+        "id": 16,
+        "photo": "https://raw.githubusercontent.com/withjp-inc/with_android_coding_test/main/assets/monster04.png",
+        "nickname": "右回り"
+    },
+    {
+        "id": 17,
+        "photo": "https://raw.githubusercontent.com/withjp-inc/with_android_coding_test/main/assets/monster05.png",
+        "nickname": "天使"
+    },
+    {
+        "id": 18,
+        "photo": "https://raw.githubusercontent.com/withjp-inc/with_android_coding_test/main/assets/monster06.png",
+        "nickname": "ドロドロ"
+    },
+    {
+        "id": 19,
+        "photo": "https://raw.githubusercontent.com/withjp-inc/with_android_coding_test/main/assets/monster07.png",
+        "nickname": "ホビー"
+    },
+    {
+        "id": 20,
+        "photo": "https://raw.githubusercontent.com/withjp-inc/with_android_coding_test/main/assets/monster08.png",
+        "nickname": "悩みます"
+    },
+    {
+        "id": 21,
+        "photo": "https://raw.githubusercontent.com/withjp-inc/with_android_coding_test/main/assets/monster09.png",
+        "nickname": "クワガタくん"
+    },
+    {
+        "id": 22,
+        "photo": "https://raw.githubusercontent.com/withjp-inc/with_android_coding_test/main/assets/monster10.png",
+        "nickname": "寝癖"
+    },
+    {
+        "id": 23,
+        "photo": "https://raw.githubusercontent.com/withjp-inc/with_android_coding_test/main/assets/monster11.png",
+        "nickname": "えっ？私？"
+    },
+    {
+        "id": 24,
+        "photo": "https://raw.githubusercontent.com/withjp-inc/with_android_coding_test/main/assets/monster12.png",
+        "nickname": "笑えない"
+    }
+]
