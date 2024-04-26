@@ -1,9 +1,8 @@
 package com.example.myapplication.usersprofile
 
-import com.squareup.moshi.JsonClass
+import com.example.myapplication.networking.usersprofile.UserSchema
 
 
-@JsonClass(generateAdapter = true)
 data class User(
     val id: Int,
     val nickname: String,
