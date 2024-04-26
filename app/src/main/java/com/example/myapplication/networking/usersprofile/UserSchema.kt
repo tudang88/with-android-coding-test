@@ -1,5 +1,6 @@
 package com.example.myapplication.networking.usersprofile
 
+import com.example.myapplication.data.local.LocalDbEntry
 import com.example.myapplication.usersprofile.User
 import com.squareup.moshi.JsonClass
 
@@ -15,3 +16,4 @@ data class UserSchema(
  * to domain model
  */
 fun UserSchema.toLocal() = User(id, nickname, photo)
+fun UserSchema.toDbEntry() = LocalDbEntry(id, nickname, photo)
