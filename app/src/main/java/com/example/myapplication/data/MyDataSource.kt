@@ -1,5 +1,7 @@
 package com.example.myapplication.data
 
+import kotlinx.coroutines.flow.Flow
+
 interface MyDataSource {
 
     /**
@@ -10,13 +12,29 @@ interface MyDataSource {
     suspend fun markFavourite(id: Int, isFav: Boolean)
 
     /**
+     * get User info by specifying id
+     * normally the user data will be retrieved
+     * from database
+     */
+    suspend fun getUserById(id: Int): User?
+    /**
      * getFavorites item from DB
      */
-    suspend fun getAllFavorites()
+    fun getAllFavorites(): Flow<List<User>>
 
     /**
      * get all items available in localDb
      * use for home screen
      */
-    suspend fun getAllCurrentItems()
+    fun getAllCurrentItems(): Flow<List<User>>
+
+    /**
+     * refresh data and update database
+     */
+    suspend fun refresh()
+
+    /**
+     * clear all database
+     */
+    suspend fun clearDatabase()
 }

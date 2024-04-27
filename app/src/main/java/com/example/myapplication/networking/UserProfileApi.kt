@@ -1,10 +1,14 @@
 package com.example.myapplication.networking
 
-import com.example.myapplication.networking.usersprofile.UserSchema
+import com.example.myapplication.common.Constants
+import com.example.myapplication.data.network.UserSchema
 import retrofit2.http.GET
 import retrofit2.http.Path
 
+/**
+ * Retrofit api interface
+ */
 interface UserProfileApi {
     @GET("/{endpoint}")
-    suspend fun fetchUsersProfile(@Path("endpoint") endpoint:String = "api/users/users.json"):List<UserSchema>
+    suspend fun fetchUsersProfile(@Path("endpoint") endpoint: String = Constants.USER_PROFILE_ENDPOINT): List<UserSchema>
 }

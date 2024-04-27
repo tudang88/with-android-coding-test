@@ -1,7 +1,7 @@
-package com.example.myapplication.networking.usersprofile
+package com.example.myapplication.data.network
 
 import com.example.myapplication.data.local.LocalDbEntry
-import com.example.myapplication.usersprofile.User
+import com.example.myapplication.data.User
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
@@ -17,3 +17,4 @@ data class UserSchema(
  */
 fun UserSchema.toLocal() = User(id, nickname, photo)
 fun UserSchema.toDbEntry() = LocalDbEntry(id, nickname, photo)
+fun List<UserSchema>.toDbEntries() = map(UserSchema::toDbEntry)

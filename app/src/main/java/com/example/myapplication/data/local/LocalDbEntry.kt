@@ -2,7 +2,7 @@ package com.example.myapplication.data.local
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.example.myapplication.usersprofile.User
+import com.example.myapplication.data.User
 
 @Entity(tableName = "user_table")
 data class LocalDbEntry(
@@ -14,3 +14,4 @@ data class LocalDbEntry(
 )
 
 fun LocalDbEntry.toUser() = User(id,nickname,photo)
+fun List<LocalDbEntry>.toUsers() = map(LocalDbEntry::toUser)

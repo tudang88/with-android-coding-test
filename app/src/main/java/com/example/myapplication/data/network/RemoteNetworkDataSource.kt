@@ -1,30 +1,23 @@
 package com.example.myapplication.data.network
 
 import com.example.myapplication.networking.UserProfileApi
-import com.example.myapplication.networking.usersprofile.toLocal
-import com.example.myapplication.usersprofile.User
 
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import javax.inject.Inject
 
 class RemoteNetworkDataSource @Inject constructor(
     private
     val networkApi: UserProfileApi
 ) : NetworkDataSource {
-    override suspend fun getUsersProfile(): Flow<Result<List<User>>> {
-        return withContext(Dispatchers.IO) {
-            flow {
-                try {
-                    val result = networkApi.fetchUsersProfile()
-                    emit(Result.success(result.map { it.toLocal() }))
-                } catch (e: Exception) {
-                    emit(Result.failure(e))
-                }
-            }
-        }
-    }
+    // A mutex is used to ensure that reads and writes are thread-safe.
+    private val accessMutex = Mutex()
 
+    /**
+     * get all user data
+     * from network
+     */
+    override suspend fun getUsersProfile(): List<UserSchema> = accessMutex.withLock {
+        return networkApi.fetchUsersProfile()
+    }
 }

@@ -18,20 +18,20 @@ interface LocalDbDao {
      * insert multiple items
      */
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertAll(vararg items: LocalDbEntry)
+    suspend fun insertAll(items: List<LocalDbEntry>)
 
     /**
      * observe database state
      * via flow
      */
     @Query("SELECT * FROM user_table")
-    fun observe(): Flow<List<LocalDbEntry>>
+    fun observeAll(): Flow<List<LocalDbEntry>>
 
     /**
      * get an item by id
      */
     @Query("SELECT * FROM user_table WHERE id = :id")
-    suspend fun getById(id: String): LocalDbEntry?
+    suspend fun getById(id: Int): LocalDbEntry?
 
     /**
      * observe all favorite items via flow
