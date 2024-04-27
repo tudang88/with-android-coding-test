@@ -89,8 +89,6 @@ fun MasterScreen(
                         // hide bottom bar
                         bottomBarState = false
                     }
-
-
                 }
             }
         }

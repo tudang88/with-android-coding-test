@@ -1,15 +1,12 @@
 package com.example.myapplication.data
 
-import android.util.Log
 import com.example.myapplication.data.local.LocalDbDao
 import com.example.myapplication.data.local.toUser
 import com.example.myapplication.data.local.toUsers
 import com.example.myapplication.data.network.NetworkDataSource
 import com.example.myapplication.data.network.toDbEntries
-import com.example.myapplication.di.ApplicationScope
 import com.example.myapplication.di.IoDispatcher
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
@@ -28,7 +25,7 @@ class MyDataRepository @Inject constructor(
      */
     override suspend fun markFavourite(id: Int, isFav: Boolean) {
         withContext(dispatcher) {
-            val user = localDb.getById(id)?.toUser()?.apply { this.isFavorite = isFav }
+            val user = localDb.getById(id)?.toUser()?.copy(isFavorite = isFav)
             if (user != null) {
                 localDb.upsert(user.toDbEntry())
             }
@@ -39,7 +36,7 @@ class MyDataRepository @Inject constructor(
      * get one user profile
      */
     override suspend fun getUserById(id: Int): User? {
-        return withContext(dispatcher){
+        return withContext(dispatcher) {
             localDb.getById(id)?.toUser()
         }
     }
@@ -73,7 +70,6 @@ class MyDataRepository @Inject constructor(
     override suspend fun refresh() {
         withContext(dispatcher) {
             val remoteData = networkDatasource.getUsersProfile()
-            Log.d("MyTag", "Found items: ${remoteData.size}")
             localDb.clearDatabase()
             localDb.insertAll(remoteData.toDbEntries())
         }

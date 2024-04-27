@@ -15,6 +15,5 @@ data class UserSchema(
  * convert Network model
  * to domain model
  */
-fun UserSchema.toLocal() = User(id, nickname, photo)
 fun UserSchema.toDbEntry() = LocalDbEntry(id, nickname, photo)
 fun List<UserSchema>.toDbEntries() = map(UserSchema::toDbEntry)

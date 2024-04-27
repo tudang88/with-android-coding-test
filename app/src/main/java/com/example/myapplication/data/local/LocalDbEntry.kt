@@ -10,8 +10,8 @@ data class LocalDbEntry(
     val id: Int,
     val nickname: String,
     val photo: String,
-    var isFavorite: Boolean = false
+    val isFavorite: Boolean = false
 )
 
-fun LocalDbEntry.toUser() = User(id,nickname,photo)
+fun LocalDbEntry.toUser() = User(id, nickname, photo, isFavorite)
 fun List<LocalDbEntry>.toUsers() = map(LocalDbEntry::toUser)
