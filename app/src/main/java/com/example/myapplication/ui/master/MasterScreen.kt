@@ -65,7 +65,8 @@ fun MasterScreen(
                         // top bar
                         appBarState = appBarState.copy(
                             navIcon = Icons.Filled.Home,
-                            title = TopBarTitle.Home.toString()
+                            title = TopBarTitle.Home.toString(),
+                            hasActionMenu = ActionMenuType.Empty
                         )
                         // show bottom bar
                         bottomBarState = true
@@ -74,7 +75,8 @@ fun MasterScreen(
                     Screen.FavouriteScreen.route -> {
                         appBarState = appBarState.copy(
                             navIcon = Icons.Filled.ThumbUp,
-                            title = TopBarTitle.Favourites.toString()
+                            title = TopBarTitle.Favourites.toString(),
+                            hasActionMenu = ActionMenuType.Empty
                         )
                         // show bottom bar
                         bottomBarState = true
