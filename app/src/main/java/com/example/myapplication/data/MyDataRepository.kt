@@ -1,5 +1,6 @@
 package com.example.myapplication.data
 
+import android.util.Log
 import com.example.myapplication.data.local.LocalDbDao
 import com.example.myapplication.data.local.toUser
 import com.example.myapplication.data.local.toUsers
@@ -20,7 +21,6 @@ class MyDataRepository @Inject constructor(
     private val networkDatasource: NetworkDataSource,
     private val localDb: LocalDbDao,
     @IoDispatcher private val dispatcher: CoroutineDispatcher,
-    @ApplicationScope private val scope: CoroutineScope,
 ) : MyDataSource {
 
     /**
@@ -28,7 +28,7 @@ class MyDataRepository @Inject constructor(
      */
     override suspend fun markFavourite(id: Int, isFav: Boolean) {
         withContext(dispatcher) {
-            val user = localDb.getById(id)?.apply { isFavorite = isFav }?.toUser()
+            val user = localDb.getById(id)?.toUser()?.apply { this.isFavorite = isFav }
             if (user != null) {
                 localDb.upsert(user.toDbEntry())
             }
@@ -73,6 +73,7 @@ class MyDataRepository @Inject constructor(
     override suspend fun refresh() {
         withContext(dispatcher) {
             val remoteData = networkDatasource.getUsersProfile()
+            Log.d("MyTag", "Found items: ${remoteData.size}")
             localDb.clearDatabase()
             localDb.insertAll(remoteData.toDbEntries())
         }

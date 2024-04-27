@@ -5,5 +5,5 @@ import androidx.room.RoomDatabase
 
 @Database(entities = [LocalDbEntry::class], version = 1, exportSchema = false)
 abstract class LocalDatabase :RoomDatabase() {
-    abstract val favouriteDao: LocalDbDao
+    abstract val localDbDao: LocalDbDao
 }

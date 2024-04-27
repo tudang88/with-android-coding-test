@@ -9,6 +9,6 @@ import retrofit2.http.Path
  * Retrofit api interface
  */
 interface UserProfileApi {
-    @GET("/{endpoint}")
+    @GET("{endpoint}")
     suspend fun fetchUsersProfile(@Path("endpoint") endpoint: String = Constants.USER_PROFILE_ENDPOINT): List<UserSchema>
 }

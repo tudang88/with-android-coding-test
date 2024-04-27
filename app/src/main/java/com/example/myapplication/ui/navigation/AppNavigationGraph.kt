@@ -6,16 +6,23 @@ import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
 import com.example.myapplication.ui.details.DetailsScreen
 import com.example.myapplication.ui.favourites.FavouritesScreen
 import com.example.myapplication.ui.home.HomeScreen
+import com.example.myapplication.ui.navigation.AppNavigationArgs.USER_ID
 
 @Composable
 fun AppNavigationGraph(
     navController: NavHostController,
+    navActions: AppNavigationActions = remember(navController) {
+        AppNavigationActions(navController)
+    },
     paddingValues: PaddingValues,
     onNavigate: (screenId: String) -> Unit
 ) {
@@ -24,20 +31,28 @@ fun AppNavigationGraph(
          * Home Route
          */
         composable(route = Screen.HomeScreen.route) {
-            HomeScreen()
+            HomeScreen() { clickedId ->
+                navActions.navigateToDetails(clickedId)
+            }
         }
         /**
          * Favourite Route
          */
         composable(route = Screen.FavouriteScreen.route) {
-            FavouritesScreen()
+            FavouritesScreen() { clickedId ->
+                navActions.navigateToDetails(clickedId)
+            }
         }
         /**
          * Details Route
          * only details screen has animation
          */
         composable(
-            route = Screen.DetailsScreen.route,
+            route = Screen.DetailsScreen.route + "/{$USER_ID}",
+            arguments = listOf(navArgument(USER_ID) {
+                type = NavType.IntType
+                defaultValue = 0
+            }),
             enterTransition = {
                 slideInHorizontally(
                     initialOffsetX = { it }, // it == fullWidth
@@ -56,8 +71,8 @@ fun AppNavigationGraph(
                     )
                 )
             },
-        ) {
-            DetailsScreen()
+        ) { entry ->
+            entry.arguments?.getInt(USER_ID)?.let { DetailsScreen(it) }
         }
     }
 }

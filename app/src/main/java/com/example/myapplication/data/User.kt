@@ -7,7 +7,7 @@ data class User(
     val id: Int,
     val nickname: String,
     val photo: String,
-    val isFavorite: Boolean = false
+    var isFavorite: Boolean = false
 )
 
 fun User.toDbEntry() = LocalDbEntry(id, nickname, photo, isFavorite)

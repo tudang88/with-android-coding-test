@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.outlined.Favorite
 import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material3.Badge
@@ -15,6 +14,7 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -22,7 +22,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.navigation.NavController
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.myapplication.ui.navigation.AppNavigationGraph
@@ -38,8 +38,7 @@ data class BottomNavigationItem(
     val title: String,
     val selectedIcon: ImageVector,
     val unselectedIcon: ImageVector,
-    val hasNews: Boolean,
-    val badgeCount: Int? = null
+    val hasBadge: Boolean = false
 )
 
 /**
@@ -58,20 +57,23 @@ val navigationItems = listOf(
         "Favorite",
         Icons.Filled.Favorite,
         Icons.Outlined.FavoriteBorder,
-        false,
-        0
+        true
     ),
 )
 
 @Composable
 fun MasterScreen(
     modifier: Modifier = Modifier,
+    viewModel: MasterScreenViewModel = hiltViewModel(),
     items: List<BottomNavigationItem> = navigationItems
 ) {
     // store the selected state
     var selectedItemIndex by rememberSaveable {
         mutableStateOf(0)
     }
+    // tracking favourite state
+    val favBadge = viewModel.favCount.collectAsState()
+    // prepare nav host controller
     val navController = rememberNavController()
     Scaffold(
         bottomBar = {
@@ -84,15 +86,15 @@ fun MasterScreen(
                         },
                         onClick = {
                             selectedItemIndex = index
-                             navController.navigate(item.route)
+                            navController.navigate(item.route)
                         },
                         icon = {
                             BadgedBox(
                                 badge = {
                                     // only display badge for item needed
-                                    if (item.badgeCount != null && item.badgeCount != 0) {
+                                    if (item.hasBadge) {
                                         Badge {
-                                            Text(text = item.badgeCount.toString())
+                                            Text(text = favBadge.value.toString())
                                         }
                                     }
                                 },
