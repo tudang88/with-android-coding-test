@@ -25,18 +25,25 @@ fun FavouritesScreen(
         columns = GridCells.Adaptive(250.dp),
         modifier = modifier.padding(horizontal = 4.dp)
     ) {
-        items(profiles) { profile ->
-            ImageCardItem(
-                profile,
-                modifier = modifier
-                    .padding(4.dp)
-                    .fillMaxWidth()
-                    .aspectRatio(1.5f),
-                onFavourite = { favState ->
-                    viewModel.onFavouriteChange(profile.id, favState)
-                },
-                onItemClicked = { id -> onItemClicked(id) }
-            )
+        items(
+            profiles,
+            key = {
+                it.id
+            }
+        ) { profile ->
+
+                ImageCardItem(
+                    profile,
+                    modifier = modifier
+                        .padding(4.dp)
+                        .fillMaxWidth()
+                        .aspectRatio(1.5f),
+                    onFavourite = { favState ->
+                        viewModel.onFavouriteChange(profile.id, favState)
+                    },
+                    onItemClicked = { id -> onItemClicked(id) }
+                )
+
         }
     }
 }

@@ -31,7 +31,7 @@ class HomeScreenViewModel @Inject constructor(
         items, loading ->
         HomeUiState(items, loading)
     }.stateIn(scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(),
+        started = SharingStarted.Eagerly,
         initialValue = HomeUiState(isLoading = true)
     )
 
