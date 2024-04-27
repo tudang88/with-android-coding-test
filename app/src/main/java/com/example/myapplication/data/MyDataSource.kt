@@ -29,6 +29,16 @@ interface MyDataSource {
     fun getAllCurrentItems(): Flow<List<User>>
 
     /**
+     * pass event from top layer
+     * to lower layer
+     */
+    fun emitShareEvent(value :Boolean)
+
+    /**
+     * observe share event action button
+     */
+    fun observeShareEven(): Flow<Boolean>
+    /**
      * refresh data and update database
      */
     suspend fun refresh()

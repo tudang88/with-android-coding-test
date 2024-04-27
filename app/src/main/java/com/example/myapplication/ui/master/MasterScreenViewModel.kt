@@ -28,6 +28,12 @@ class MasterScreenViewModel @Inject constructor(
     )
 
     /**
+     * onShare button
+     */
+    fun onShareEvent() {
+        repository.emitShareEvent(true)
+    }
+    /**
      * refresh data
      */
     init {

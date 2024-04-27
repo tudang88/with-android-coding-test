@@ -7,9 +7,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.myapplication.ui.common.composables.ImageCardItem
+import com.example.myapplication.ui.common.utils.shareImage
+import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun DetailsScreen(
@@ -18,7 +21,7 @@ fun DetailsScreen(
     viewModel: DetailsScreenViewModel = hiltViewModel()
 ) {
     val uiState = viewModel.uiState.collectAsState()
-
+    val context = LocalContext.current
     /**
      * get the user profile
      * by Id
@@ -27,6 +30,17 @@ fun DetailsScreen(
         viewModel.getUserDetails(id)
     }
 
+    /**
+     * share photo
+     */
+    LaunchedEffect(Unit) {
+        viewModel.shareEvent.collectLatest {
+            if (it) {
+                uiState.value.user?.let { it1 -> shareImage(context, it1.photo) }
+                viewModel.clearShareEvent()
+            }
+        }
+    }
     /**
      * setup ui
      */

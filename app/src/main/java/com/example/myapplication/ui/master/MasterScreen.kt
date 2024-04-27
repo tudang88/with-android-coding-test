@@ -52,7 +52,12 @@ fun MasterScreen(
     }
 
     Scaffold(
-        topBar = { buildTopAppBar(navActions, appBarState) },
+        topBar = {
+            buildTopAppBar(navActions, appBarState) {
+                // propagate action button event
+                viewModel.onShareEvent()
+            }
+        },
         bottomBar = {
             if (bottomBarState)
                 buildBottomBar(items, selectedItemIndex, navActions, favBadge)

@@ -27,6 +27,7 @@ import androidx.compose.ui.res.painterResource
 
 import com.example.myapplication.R
 import com.example.myapplication.common.Constants
+import com.example.myapplication.ui.common.utils.shareImage
 import com.example.myapplication.ui.navigation.AppNavigationActions
 import com.example.myapplication.ui.navigation.Screen
 
@@ -94,7 +95,7 @@ fun CreateActionMenu(
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun buildTopAppBar(navActions: AppNavigationActions, appBarState: TopAppBarState) {
+fun buildTopAppBar(navActions: AppNavigationActions, appBarState: TopAppBarState, onShareButtonClicked: () -> Unit) {
     val context = LocalContext.current
     CenterAlignedTopAppBar(
         colors = TopAppBarDefaults.smallTopAppBarColors(
@@ -122,16 +123,8 @@ fun buildTopAppBar(navActions: AppNavigationActions, appBarState: TopAppBarState
                 onActionMenuItemClick = { item ->
                     when (item) {
                         "Share" -> {
-                            val sendIntent: Intent = Intent().apply {
-                                action = Intent.ACTION_SEND
-                                putExtra(
-                                    Intent.EXTRA_TEXT,
-                                    "photo url"
-                                )
-                                type = "text/plain"
-                            }
-                            val shareIntent = Intent.createChooser(sendIntent, null)
-                            context.startActivity(shareIntent)
+                            // propagate event
+                           onShareButtonClicked()
                         }
                     }
                 }
@@ -165,7 +158,7 @@ val navigationItems = listOf(
     ),
     BottomNavigationItem(
         Screen.FavouriteScreen.route,
-        "Favorite",
+        "Favourite",
         Icons.Filled.Favorite,
         Icons.Outlined.FavoriteBorder,
         true

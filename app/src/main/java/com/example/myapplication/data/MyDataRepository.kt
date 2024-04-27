@@ -8,6 +8,7 @@ import com.example.myapplication.data.network.toDbEntries
 import com.example.myapplication.di.IoDispatcher
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -19,6 +20,7 @@ class MyDataRepository @Inject constructor(
     private val localDb: LocalDbDao,
     @IoDispatcher private val dispatcher: CoroutineDispatcher,
 ) : MyDataSource {
+    private val _shareEvent = MutableStateFlow(false)
 
     /**
      * mark one favorite
@@ -62,6 +64,12 @@ class MyDataRepository @Inject constructor(
             }
         }
     }
+
+    override fun emitShareEvent(value: Boolean) {
+        _shareEvent.value = value
+    }
+
+    override fun observeShareEven(): Flow<Boolean> = _shareEvent
 
     /**
      * get data from network

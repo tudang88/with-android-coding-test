@@ -34,6 +34,14 @@ class DetailsScreenViewModel @Inject constructor(
         DetailsUiState()
     )
 
+    val shareEvent = repository.observeShareEven()
+
+    /**
+     * reset share event
+     */
+    fun clearShareEvent() {
+        repository.emitShareEvent(false)
+    }
     /**
      * get User info
      * from data source
