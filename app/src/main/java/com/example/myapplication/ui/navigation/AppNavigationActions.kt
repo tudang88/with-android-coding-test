@@ -17,12 +17,8 @@ class AppNavigationActions(private val navController: NavHostController) {
 
     fun navigateToHome() {
         navController.navigate(Screen.HomeScreen.route) {
-            // Pop up to the start destination of the graph to
-            // avoid building up a large stack of destinations
-            // on the back stack as users select items
-            popUpTo(navController.graph.findStartDestination().id) {
-                saveState = true
-            }
+            // popup to current tab screen to prevent inconsistent back stack
+            popUpTo(Screen.HomeScreen.route)
             // Avoid multiple copies of the same destination when
             // re-selecting the same item
             launchSingleTop = true
@@ -33,12 +29,8 @@ class AppNavigationActions(private val navController: NavHostController) {
 
     fun navigateToFavourites() {
         navController.navigate(Screen.FavouriteScreen.route) {
-            // Pop up to the start destination of the graph to
-            // avoid building up a large stack of destinations
-            // on the back stack as users select items
-            popUpTo(navController.graph.findStartDestination().id) {
-                saveState = true
-            }
+            // popup to current tab screen to prevent inconsistent back stack
+            popUpTo(Screen.FavouriteScreen.route)
             // Avoid multiple copies of the same destination when
             // re-selecting the same item
             launchSingleTop = true

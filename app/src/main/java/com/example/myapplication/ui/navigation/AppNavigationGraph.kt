@@ -20,18 +20,17 @@ import com.example.myapplication.ui.navigation.AppNavigationArgs.USER_ID
 @Composable
 fun AppNavigationGraph(
     navController: NavHostController,
-    navActions: AppNavigationActions = remember(navController) {
-        AppNavigationActions(navController)
-    },
+    navActions: AppNavigationActions,
     paddingValues: PaddingValues,
-    onNavigate: (screenId: String) -> Unit
+    onNavigate: (dest: String) -> Unit
 ) {
     NavHost(navController = navController, startDestination = Screen.HomeScreen.route) {
         /**
          * Home Route
          */
         composable(route = Screen.HomeScreen.route) {
-            HomeScreen() { clickedId ->
+            onNavigate(Screen.HomeScreen.route)
+            HomeScreen { clickedId ->
                 navActions.navigateToDetails(clickedId)
             }
         }
@@ -39,7 +38,8 @@ fun AppNavigationGraph(
          * Favourite Route
          */
         composable(route = Screen.FavouriteScreen.route) {
-            FavouritesScreen() { clickedId ->
+            onNavigate(Screen.FavouriteScreen.route)
+            FavouritesScreen { clickedId ->
                 navActions.navigateToDetails(clickedId)
             }
         }
@@ -72,7 +72,9 @@ fun AppNavigationGraph(
                 )
             },
         ) { entry ->
+            onNavigate(Screen.DetailsScreen.route)
             entry.arguments?.getInt(USER_ID)?.let { DetailsScreen(it) }
+
         }
     }
 }

@@ -32,7 +32,6 @@ import com.example.myapplication.data.User
  * This common item will be used in
  * HomeScreen and FavouritesScreen
  */
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ImageCardItem(
     user: User,
