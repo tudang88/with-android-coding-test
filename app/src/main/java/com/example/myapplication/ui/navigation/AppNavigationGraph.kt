@@ -53,24 +53,24 @@ fun AppNavigationGraph(
                 type = NavType.IntType
                 defaultValue = 0
             }),
-            enterTransition = {
-                slideInHorizontally(
-                    initialOffsetX = { it }, // it == fullWidth
-                    animationSpec = tween(
-                        durationMillis = 200,
-                        easing = LinearEasing
-                    )
-                )
-            },
-            exitTransition = {
-                slideOutHorizontally(
-                    targetOffsetX = { it },
-                    animationSpec = tween(
-                        durationMillis = 200,
-                        easing = LinearEasing
-                    )
-                )
-            },
+//            enterTransition = {
+//                slideInHorizontally(
+//                    initialOffsetX = { it }, // it == fullWidth
+//                    animationSpec = tween(
+//                        durationMillis = 200,
+//                        easing = LinearEasing
+//                    )
+//                )
+//            },
+//            exitTransition = {
+//                slideOutHorizontally(
+//                    targetOffsetX = { it },
+//                    animationSpec = tween(
+//                        durationMillis = 200,
+//                        easing = LinearEasing
+//                    )
+//                )
+//            },
         ) { entry ->
             onNavigate(Screen.DetailsScreen.route)
             entry.arguments?.getInt(USER_ID)?.let { DetailsScreen(it) }
