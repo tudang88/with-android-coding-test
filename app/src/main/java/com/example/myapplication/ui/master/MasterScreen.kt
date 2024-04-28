@@ -1,11 +1,9 @@
 package com.example.myapplication.ui.master
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -52,7 +50,7 @@ fun MasterScreen(
         }
     ) {
         Column(modifier = Modifier.padding(it)) {
-            MasterScreenContent(it, navController, navActions) { dest ->
+            MasterScreenContent(navController, navActions) { dest ->
                 viewModel.onScreenTransition(dest)
             }
         }
@@ -65,14 +63,12 @@ fun MasterScreen(
  */
 @Composable
 fun MasterScreenContent(
-    it: PaddingValues,
     navController: NavHostController,
     navActions: AppNavigationActions,
     onNavigate: (dest: String) -> Unit
 ) {
     AppNavigationGraph(
         navController = navController,
-        paddingValues = it,
         navActions = navActions,
         onNavigate = {
             onNavigate(it)

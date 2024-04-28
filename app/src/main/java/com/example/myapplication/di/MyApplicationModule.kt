@@ -59,7 +59,11 @@ class MyApplicationModule {
     fun userProfileApi(retrofit: Retrofit): UserProfileApi {
         return retrofit.create(UserProfileApi::class.java)
     }
+}
 
+@Module
+@InstallIn(SingletonComponent::class)
+object DatabaseModule {
     @Provides
     @Singleton
     fun myRoomDatabase(application: Application): LocalDatabase {

@@ -16,7 +16,6 @@ import com.example.myapplication.ui.navigation.AppNavigationArgs.USER_ID
 fun AppNavigationGraph(
     navController: NavHostController,
     navActions: AppNavigationActions,
-    paddingValues: PaddingValues,
     onNavigate: (dest: String) -> Unit
 ) {
     NavHost(navController = navController, startDestination = Screen.HomeScreen.route) {

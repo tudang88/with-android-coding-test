@@ -21,7 +21,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 
 import com.example.myapplication.R
@@ -136,7 +135,6 @@ fun buildTopAppBar(
     appBarState: AppBarAndBottomBarState,
     onShareButtonClicked: () -> Unit
 ) {
-    val context = LocalContext.current
     CenterAlignedTopAppBar(
         colors = TopAppBarDefaults.smallTopAppBarColors(
             containerColor = MaterialTheme.colorScheme.primaryContainer,

@@ -43,13 +43,13 @@ interface LocalDbDao {
      * observe a specific item
      */
     @Query("SELECT * FROM user_table WHERE id = :id")
-    fun observeById(id: String): Flow<LocalDbEntry?>
+    fun observeById(id: Int): Flow<LocalDbEntry?>
 
     /**
      * delete one item
      */
     @Query("DELETE FROM user_table WHERE id = :id")
-    suspend fun delete(id: String)
+    suspend fun delete(id: Int)
 
     /**
      * clear all db

@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.kotlinAndroid)
+    alias(libs.plugins.kapt)
     alias(libs.plugins.ksp)
     alias(libs.plugins.hilt)
 }
@@ -38,6 +39,24 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
+    // Always show the result of every unit test, even if it passes.
+    testOptions.unitTests {
+        isIncludeAndroidResources = true
+
+        all { test ->
+            with(test) {
+                testLogging {
+                    events = setOf(
+                        org.gradle.api.tasks.testing.logging.TestLogEvent.PASSED,
+                        org.gradle.api.tasks.testing.logging.TestLogEvent.SKIPPED,
+                        org.gradle.api.tasks.testing.logging.TestLogEvent.FAILED,
+                        org.gradle.api.tasks.testing.logging.TestLogEvent.STANDARD_OUT,
+                        org.gradle.api.tasks.testing.logging.TestLogEvent.STANDARD_ERROR,
+                    )
+                }
+            }
+        }
+    }
     buildFeatures {
         viewBinding = true
         compose = true
@@ -58,7 +77,9 @@ dependencies {
     implementation(libs.lifecycle.runtime.ktx)
     implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.activity.compose)
-    implementation(platform(libs.compose.bom))
+    // Jetpack Compose
+    val composeBom = platform(libs.compose.bom)
+    implementation(composeBom)
     implementation(libs.ui)
     implementation(libs.ui.graphics)
     implementation(libs.ui.tooling.preview)
@@ -84,18 +105,90 @@ dependencies {
     // Image loading
     implementation(libs.coil)
 
-    // ORM
+    // ROOM
     implementation(libs.room)
     implementation(libs.room.ktx)
     ksp(libs.room.compiler)
 
+    // Dependencies for local unit tests
     testImplementation(libs.junit)
+    testImplementation(composeBom)
+    testImplementation(libs.junit4)
+    testImplementation(libs.androidx.archcore.testing)
+    testImplementation(libs.kotlinx.coroutines.android)
+    testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.androidx.navigation.testing)
+    testImplementation(libs.androidx.test.espresso.core)
+    testImplementation(libs.androidx.test.espresso.contrib)
+    testImplementation(libs.androidx.test.espresso.intents)
+//    testImplementation(libs.google.truth)
+    testImplementation(libs.androidx.compose.ui.test.junit)
+    // JVM tests - Hilt
+    testImplementation(libs.hilt.android.testing)
+    kaptTest(libs.hilt.compiler)
+
+    // Dependencies for Android unit tests
+    androidTestImplementation(composeBom)
+    androidTestImplementation(libs.junit4)
+    androidTestImplementation(libs.kotlinx.coroutines.test)
+    androidTestImplementation(libs.androidx.compose.ui.test.junit)
 
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.espresso.core)
-    androidTestImplementation(platform(libs.compose.bom))
     androidTestImplementation(libs.ui.test.junit4)
 
-    debugImplementation(libs.ui.tooling)
-    debugImplementation(libs.ui.test.manifest)
+    // AndroidX Test - JVM testing
+    testImplementation(libs.androidx.test.core.ktx)
+    testImplementation(libs.androidx.test.ext)
+    testImplementation(libs.androidx.test.rules)
+    testImplementation(project(":shared-test"))
+
+    // AndroidX Test - Instrumented testing
+    androidTestImplementation(libs.androidx.test.core.ktx)
+    androidTestImplementation(libs.androidx.test.ext)
+    androidTestImplementation(libs.androidx.test.rules)
+    androidTestImplementation(libs.room.testing)
+    androidTestImplementation(libs.androidx.archcore.testing)
+    androidTestImplementation(libs.androidx.navigation.testing)
+    androidTestImplementation(libs.androidx.test.espresso.core)
+    androidTestImplementation(libs.androidx.test.espresso.contrib)
+    androidTestImplementation(libs.androidx.test.espresso.intents)
+    androidTestImplementation(libs.androidx.test.espresso.idling.resources)
+    androidTestImplementation(libs.androidx.test.espresso.idling.concurrent)
+    androidTestImplementation(project(":shared-test"))
+
+    // AndroidX Test - Hilt testing
+    androidTestImplementation(libs.hilt.android.testing)
+    kaptAndroidTest(libs.hilt.compiler)
+//    debugImplementation(libs.ui.tooling)
+//    debugImplementation(libs.ui.test.manifest)
+
+
+
+
+
+
+
+    // AndroidX Test - JVM testing
+    testImplementation(libs.androidx.test.core.ktx)
+    testImplementation(libs.androidx.test.ext)
+    testImplementation(libs.androidx.test.rules)
+    testImplementation(project(":shared-test"))
+
+    // AndroidX Test - Instrumented testing
+    androidTestImplementation(libs.androidx.test.core.ktx)
+    androidTestImplementation(libs.androidx.test.ext)
+    androidTestImplementation(libs.androidx.test.rules)
+    androidTestImplementation(libs.room.testing)
+    androidTestImplementation(libs.androidx.archcore.testing)
+    androidTestImplementation(libs.androidx.navigation.testing)
+    androidTestImplementation(libs.androidx.test.espresso.core)
+    androidTestImplementation(libs.androidx.test.espresso.contrib)
+    androidTestImplementation(libs.androidx.test.espresso.intents)
+    androidTestImplementation(libs.androidx.test.espresso.idling.resources)
+    androidTestImplementation(libs.androidx.test.espresso.idling.concurrent)
+    androidTestImplementation(project(":shared-test"))
+
+    // AndroidX Test - Hilt testing
+    androidTestImplementation(libs.hilt.android.testing)
 }
