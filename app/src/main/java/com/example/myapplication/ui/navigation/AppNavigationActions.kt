@@ -1,6 +1,5 @@
 package com.example.myapplication.ui.navigation
 
-import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 
 object AppNavigationArgs {
