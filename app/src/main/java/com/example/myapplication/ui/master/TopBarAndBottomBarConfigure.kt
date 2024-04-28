@@ -1,11 +1,11 @@
 package com.example.myapplication.ui.master
 
-import android.content.Intent
 import android.util.Log
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.ThumbUp
 import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material3.Badge
@@ -20,14 +20,12 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.State
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 
 import com.example.myapplication.R
 import com.example.myapplication.common.Constants
-import com.example.myapplication.ui.common.utils.shareImage
 import com.example.myapplication.ui.navigation.AppNavigationActions
 import com.example.myapplication.ui.navigation.Screen
 
@@ -38,18 +36,55 @@ enum class ActionMenuType {
     Empty,
     ShareMenu
 }
-enum class TopBarTitle(private val title:String){
+
+enum class TopBarTitle(private val title: String) {
     Home("Home"),
     Favourites("Favourites"),
     Details("Details");
 
     override fun toString() = title
 }
-data class TopAppBarState(
+
+data class AppBarAndBottomBarState(
     val navIcon: ImageVector,
     val title: String,
-    val hasActionMenu: ActionMenuType = ActionMenuType.Empty
+    val hasActionMenu: ActionMenuType = ActionMenuType.Empty,
+    val visibleBottomBar: Boolean = true
 )
+
+/**
+ * Helper to determine
+ * Top Bar And Bottom Bar
+ * state
+ */
+fun AppBarAndBottomBarState.screenTransition(dest: String): AppBarAndBottomBarState {
+    val destinationMap = mapOf(
+        Screen.HomeScreen.route to Triple(
+            Icons.Filled.Home,
+            TopBarTitle.Home.toString(),
+            ActionMenuType.Empty
+        ),
+        Screen.FavouriteScreen.route to Triple(
+            Icons.Filled.ThumbUp,
+            TopBarTitle.Favourites.toString(),
+            ActionMenuType.Empty
+        )
+    )
+
+    val (navIcon, title, hasActionMenu) = destinationMap[dest]
+        ?: Triple(
+            Icons.AutoMirrored.Filled.ArrowBack,
+            TopBarTitle.Details.toString(),
+            ActionMenuType.ShareMenu
+        )
+
+    return this.copy(
+        navIcon = navIcon,
+        title = title,
+        hasActionMenu = hasActionMenu,
+        visibleBottomBar = dest != Screen.DetailsScreen.route // Adjust visibility based on destination
+    )
+}
 
 @Composable
 fun NavigationIcon(
@@ -83,6 +118,7 @@ fun CreateActionMenu(
                 )
             }
         }
+
         else -> {
             // No support for other type of action button
         }
@@ -95,7 +131,11 @@ fun CreateActionMenu(
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun buildTopAppBar(navActions: AppNavigationActions, appBarState: TopAppBarState, onShareButtonClicked: () -> Unit) {
+fun buildTopAppBar(
+    navActions: AppNavigationActions,
+    appBarState: AppBarAndBottomBarState,
+    onShareButtonClicked: () -> Unit
+) {
     val context = LocalContext.current
     CenterAlignedTopAppBar(
         colors = TopAppBarDefaults.smallTopAppBarColors(
@@ -124,7 +164,7 @@ fun buildTopAppBar(navActions: AppNavigationActions, appBarState: TopAppBarState
                     when (item) {
                         "Share" -> {
                             // propagate event
-                           onShareButtonClicked()
+                            onShareButtonClicked()
                         }
                     }
                 }
@@ -171,11 +211,11 @@ val navigationItems = listOf(
 @Composable
 fun buildBottomBar(
     items: List<BottomNavigationItem>,
-    selectedItemIndex: Int,
+    selectedIndex: Int,
     navActions: AppNavigationActions,
-    favBadge: State<Int>
+    favBadge: Int,
+    onSelectedIndex: (Int) -> Unit
 ) {
-    var selectedIndex = selectedItemIndex
     NavigationBar {
         items.forEachIndexed { index, item ->
             NavigationBarItem(
@@ -184,7 +224,7 @@ fun buildBottomBar(
                     Text(text = item.title)
                 },
                 onClick = {
-                    selectedIndex = index
+                    onSelectedIndex(index)
                     // navigate to tab
                     when (item.route) {
                         Screen.HomeScreen.route -> navActions.navigateToHome()
@@ -203,7 +243,7 @@ fun buildBottomBar(
                             // only display badge for item needed
                             if (item.hasBadge) {
                                 Badge {
-                                    Text(text = favBadge.value.toString())
+                                    Text(text = favBadge.toString())
                                 }
                             }
                         },
@@ -219,3 +259,4 @@ fun buildBottomBar(
         }
     }
 }
+
