@@ -69,18 +69,14 @@ class MasterScreenViewModel @Inject constructor(
      * change TopAppBar
      */
     fun onScreenTransition(dest: String) {
-        viewModelScope.launch {
-            _topBarState.value = _topBarState.value.screenTransition(dest)
-        }
+        _topBarState.value = _topBarState.value.screenTransition(dest)
     }
 
     /**
      * update bottom tab index state
      */
     fun onTabSelected(index: Int) {
-        viewModelScope.launch {
-            _bottomTabIndex.value = index
-        }
+        _bottomTabIndex.value = index
     }
 
     /**
