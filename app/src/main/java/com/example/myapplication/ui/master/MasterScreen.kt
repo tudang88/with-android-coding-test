@@ -10,6 +10,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.myapplication.ui.navigation.AppNavigationActions
@@ -22,7 +23,7 @@ fun MasterScreen(
     items: List<BottomNavigationItem> = navigationItems
 ) {
     // collect ui state from View Model
-    val uiState = viewModel.uiState.collectAsState()
+    val uiState = viewModel.uiState.collectAsStateWithLifecycle()
     val topBarState = uiState.value.appBarState
     // store the selected state cross configuration change
     val selectedItemIndex = uiState.value.bottomTabIndex

@@ -11,6 +11,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.myapplication.ui.common.composables.ImageCardItem
 
 @Composable
@@ -20,7 +21,7 @@ fun HomeScreen(
     onItemClicked: (id: Int) -> Unit = {}
 ) {
     // collect ui state
-    val state = viewModel.uiState.collectAsState()
+    val state = viewModel.uiState.collectAsStateWithLifecycle()
     val profiles = state.value.items
     LazyVerticalGrid(
         columns = GridCells.Adaptive(250.dp),

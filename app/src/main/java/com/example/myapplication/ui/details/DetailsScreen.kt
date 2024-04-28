@@ -10,6 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.myapplication.ui.common.composables.ImageCardItem
 import com.example.myapplication.ui.common.utils.shareImage
 import kotlinx.coroutines.flow.collectLatest
@@ -20,7 +21,7 @@ fun DetailsScreen(
     modifier: Modifier = Modifier,
     viewModel: DetailsScreenViewModel = hiltViewModel()
 ) {
-    val uiState = viewModel.uiState.collectAsState()
+    val uiState = viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
     /**
      * get the user profile
