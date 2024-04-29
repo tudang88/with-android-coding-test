@@ -48,7 +48,8 @@ data class AppBarAndBottomBarState(
     val navIcon: ImageVector,
     val title: String,
     val hasActionMenu: ActionMenuType = ActionMenuType.Empty,
-    val visibleBottomBar: Boolean = true
+    val visibleBottomBar: Boolean = true,
+    val enableClick: Boolean = false
 )
 
 /**
@@ -58,39 +59,35 @@ data class AppBarAndBottomBarState(
  */
 fun AppBarAndBottomBarState.screenTransition(dest: String): AppBarAndBottomBarState {
     val destinationMap = mapOf(
-        Screen.HomeScreen.route to Triple(
+        Screen.HomeScreen.route to AppBarAndBottomBarState(
             Icons.Filled.Home,
             TopBarTitle.Home.toString(),
             ActionMenuType.Empty
         ),
-        Screen.FavouriteScreen.route to Triple(
+        Screen.FavouriteScreen.route to AppBarAndBottomBarState(
             Icons.Filled.ThumbUp,
             TopBarTitle.Favourites.toString(),
             ActionMenuType.Empty
-        )
+        ),
     )
 
-    val (navIcon, title, hasActionMenu) = destinationMap[dest]
-        ?: Triple(
+    return destinationMap[dest]
+        ?: AppBarAndBottomBarState(
             Icons.AutoMirrored.Filled.ArrowBack,
             TopBarTitle.Details.toString(),
-            ActionMenuType.ShareMenu
+            ActionMenuType.ShareMenu,
+            false,
+            true
         )
-
-    return this.copy(
-        navIcon = navIcon,
-        title = title,
-        hasActionMenu = hasActionMenu,
-        visibleBottomBar = dest != Screen.DetailsScreen.route // Adjust visibility based on destination
-    )
 }
 
 @Composable
 fun NavigationIcon(
     navIcon: ImageVector,
+    enableClick: Boolean = false,
     onNavigationIconClick: () -> Unit
 ) {
-    IconButton(onClick = onNavigationIconClick) {
+    IconButton(enabled = enableClick, onClick = onNavigationIconClick) {
         Icon(
             imageVector = navIcon,
             contentDescription = "Navigation Drawer Button"
@@ -142,18 +139,24 @@ fun buildTopAppBar(
         ),
         title = { Text(appBarState.title) },
         navigationIcon = {
-            NavigationIcon(navIcon = appBarState.navIcon, onNavigationIconClick = {
-                when (appBarState.navIcon) {
-                    Icons.AutoMirrored.Filled.ArrowBack -> {
-                        // back stack
-                        navActions.navigateBack()
-                    }
+            NavigationIcon(
+                navIcon = appBarState.navIcon,
+                enableClick = appBarState.enableClick,
+                onNavigationIconClick = {
+                    when (appBarState.navIcon) {
+                        Icons.AutoMirrored.Filled.ArrowBack -> {
+                            // back stack
+                            navActions.navigateBack()
+                        }
 
-                    else -> {
-                        Log.e(Constants.LOG_TAG_COMMON, "Unsupported event on Navigation Button")
+                        else -> {
+                            Log.e(
+                                Constants.LOG_TAG_COMMON,
+                                "Unsupported event on Navigation Button"
+                            )
+                        }
                     }
-                }
-            })
+                })
         },
         actions = {
             CreateActionMenu(
