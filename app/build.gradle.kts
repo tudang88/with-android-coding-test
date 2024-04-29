@@ -121,7 +121,7 @@ dependencies {
     testImplementation(libs.androidx.test.espresso.core)
     testImplementation(libs.androidx.test.espresso.contrib)
     testImplementation(libs.androidx.test.espresso.intents)
-//    testImplementation(libs.google.truth)
+    testImplementation(libs.google.truth)
     testImplementation(libs.androidx.compose.ui.test.junit)
     // JVM tests - Hilt
     testImplementation(libs.hilt.android.testing)

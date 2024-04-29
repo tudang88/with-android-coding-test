@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.myapplication.data.MyDataSource
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -37,13 +38,7 @@ class MasterScreenViewModel @Inject constructor(
         MutableStateFlow(AppBarAndBottomBarState(Icons.Filled.Home, TopBarTitle.Home.toString()))
 
     // favourite badge state
-    private val _favCount: StateFlow<Int> = repository.getAllFavorites().map {
-        it.size
-    }.stateIn(
-        viewModelScope,
-        SharingStarted.WhileSubscribed(),
-        0
-    )
+    private val _favCount: Flow<Int> = repository.getAllFavorites().map { it.size }
 
     // bottom tab index state
     private val _bottomTabIndex = MutableStateFlow(0)

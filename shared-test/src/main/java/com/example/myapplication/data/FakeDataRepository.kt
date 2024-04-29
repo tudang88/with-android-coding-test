@@ -1,8 +1,13 @@
 package com.example.myapplication.data
 
+import android.annotation.SuppressLint
+import android.util.Log
+import androidx.annotation.VisibleForTesting
+import com.example.myapplication.common.SAMPLE_USERS
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 
 /**
@@ -12,32 +17,9 @@ class FakeDataRepository : MyDataSource {
 
     private val _shareEvent = MutableStateFlow(false)
     private val _userEntries = MutableStateFlow(LinkedHashMap<Int, User>())
-    private val userEntries = listOf(
-        User(
-            id = 1,
-            nickname = "User 1",
-            photo = "PHOTO_URL1"
-        ),
-        User(
-            id = 2,
-            nickname = "User 2",
-            photo = "PHOTO_URL2"
-        ),
-        User(
-            id = 3,
-            nickname = "User 3",
-            photo = "PHOTO_URL4"
-        ),
-        User(
-            id = 4,
-            nickname = "User 4",
-            photo = "PHOTO_URL1"
-        ), User(
-            id = 5,
-            nickname = "User 5",
-            photo = "PHOTO_URL5"
-        )
-    )
+
+    @SuppressLint("VisibleForTests")
+    private val userEntries = SAMPLE_USERS
 
     init {
         for (item in userEntries) {
@@ -77,8 +59,8 @@ class FakeDataRepository : MyDataSource {
      * get all favourites items
      */
     override fun getAllFavorites(): Flow<List<User>> {
-        return flow {
-            _userEntries.value.filter { entry -> entry.value.isFavorite }.toList()
+        return _userEntries.map { userMap ->
+            userMap.values.filter { it.isFavorite }
         }
     }
 
@@ -86,8 +68,8 @@ class FakeDataRepository : MyDataSource {
      * Get all User items
      */
     override fun getAllCurrentItems(): Flow<List<User>> {
-        return flow {
-            _userEntries.value.map { entry -> entry.value }.toList()
+        return _userEntries.map { userMap ->
+            userMap.values.toList()
         }
     }
 
@@ -105,5 +87,19 @@ class FakeDataRepository : MyDataSource {
 
     override suspend fun clearDatabase() {
         _userEntries.value.clear()
+    }
+
+    /**
+     * this method only use for testing
+     */
+    @VisibleForTesting
+    fun addUsersData(users: List<User>) {
+        _userEntries.update { oldEntries ->
+            val newEntries = LinkedHashMap<Int, User>(oldEntries)
+            for (item in users) {
+                newEntries[item.id] = item
+            }
+            newEntries
+        }
     }
 }
