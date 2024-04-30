@@ -27,9 +27,9 @@ class MyDataRepository @Inject constructor(
      */
     override suspend fun markFavourite(id: Int, isFav: Boolean) {
         withContext(dispatcher) {
-            val user = localDb.getById(id)?.toUser()?.copy(isFavorite = isFav)
+            val user = localDb.getById(id)?.copy(isFavorite = isFav)
             if (user != null) {
-                localDb.upsert(user.toDbEntry())
+                localDb.upsert(user)
             }
         }
     }

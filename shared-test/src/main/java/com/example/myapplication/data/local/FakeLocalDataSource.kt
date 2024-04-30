@@ -19,7 +19,7 @@ class FakeLocalDataSource(initialEntries: List<LocalDbEntry>? = emptyList()) : L
     }
 
     override suspend fun upsert(favProfile: LocalDbEntry) {
-       val entry = _userEntries?.get(favProfile.id)?.copy(isFavorite = true)
+        val entry = _userEntries?.get(favProfile.id)?.copy(isFavorite = favProfile.isFavorite)
         if (entry != null) {
             _userEntries?.put(entry.id, entry)
         }
@@ -40,10 +40,10 @@ class FakeLocalDataSource(initialEntries: List<LocalDbEntry>? = emptyList()) : L
     }
 
     override fun getFavoriteItems(): Flow<List<LocalDbEntry>> {
-       return flow {
-           _userEntries?.filter { entry -> entry.value.isFavorite }?.map { entry -> entry.value  }
-               ?.let { emit(it.toList()) }
-       }
+        return flow {
+            _userEntries?.filter { entry -> entry.value.isFavorite }?.map { entry -> entry.value }
+                ?.let { emit(it.toList()) }
+        }
     }
 
     override fun observeById(id: Int): Flow<LocalDbEntry?> {
