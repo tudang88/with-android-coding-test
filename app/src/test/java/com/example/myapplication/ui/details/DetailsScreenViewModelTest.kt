@@ -1,8 +1,15 @@
 package com.example.myapplication.ui.details
 
 import com.example.myapplication.MainCoroutineRule
+import com.example.myapplication.common.SAMPLE_USERS
 import com.example.myapplication.data.FakeDataRepository
+import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.test.runTest
 
 import org.junit.Before
 import org.junit.Rule
@@ -27,18 +34,58 @@ class DetailsScreenViewModelTest {
     }
 
     @Test
-    fun getShareEvent() {
+    fun selectUserById_showDetails() = runTest {
+        // Create an empty collector for the StateFlow
+        backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
+            detailsScreenViewModel.uiState.collect()
+        }
+        // Given: repository already have a list of USER
+        // is SAMPLE_USERS
+        // When: A user was specified by id
+        detailsScreenViewModel.getUserDetails(SAMPLE_USERS[0].id)
+        // Then: UI should be reflected the expected User
+        val user = detailsScreenViewModel.uiState.value.user
+        assertThat(user).isEqualTo(SAMPLE_USERS[0])
+
     }
 
     @Test
-    fun clearShareEvent() {
+    fun onFavouriteChange() = runTest {
+        // Create an empty collector for the StateFlow
+        backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
+            detailsScreenViewModel.uiState.collect()
+        }
+        // Given: A user has already displayed
+        detailsScreenViewModel.getUserDetails(SAMPLE_USERS[0].id)
+        // PART-1: mark as favourite
+        // When: mark as favourite
+        detailsScreenViewModel.onFavouriteChange(true)
+        // Then: the change should be reflect on repository
+        // And the state of DetailsScreen
+        val isFav = detailsScreenViewModel.uiState.value.isFav
+        val favList = dataRepository.getAllFavorites().first()
+        assertThat(favList.contains(SAMPLE_USERS[0].copy(isFavorite = true))).isTrue()
+        assertThat(isFav).isTrue()
+        // PART-2: un-mark favourite
+        detailsScreenViewModel.onFavouriteChange(false)
+        val favList2 = dataRepository.getAllFavorites().first()
+        val isFav2 = detailsScreenViewModel.uiState.value.isFav
+        assertThat(favList2.contains(SAMPLE_USERS[0].copy(isFavorite = true))).isFalse()
+        assertThat(isFav2).isFalse()
     }
 
     @Test
-    fun getUserDetails() {
+    fun getShareEvent_updateFlag() = runTest {
+        // Given: DetailScreen has already displayed
+        // When: a share event come
+        dataRepository.emitShareEvent(true)
+        // Then: the event is transferred to viewModel layer
+        val shareFlag = detailsScreenViewModel.shareEvent.first()
+        assertThat(shareFlag).isTrue()
+        // clear event
+        detailsScreenViewModel.clearShareEvent()
+        val shareFlagClear = detailsScreenViewModel.shareEvent.first()
+        assertThat(shareFlagClear).isFalse()
     }
 
-    @Test
-    fun onFavouriteChange() {
-    }
 }

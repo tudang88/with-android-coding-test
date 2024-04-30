@@ -42,6 +42,7 @@ class DetailsScreenViewModel @Inject constructor(
     fun clearShareEvent() {
         repository.emitShareEvent(false)
     }
+
     /**
      * get User info
      * from data source
@@ -62,7 +63,10 @@ class DetailsScreenViewModel @Inject constructor(
      */
     fun onFavouriteChange(value: Boolean) {
         viewModelScope.launch {
-            _user.value?.let { repository.markFavourite(it.id, value) }
+            _user.value?.let {
+                repository.markFavourite(it.id, value)
+                _isFav.value = value
+            }
         }
     }
 }
