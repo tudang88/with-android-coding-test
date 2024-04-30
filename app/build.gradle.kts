@@ -17,7 +17,7 @@ android {
         versionCode = 1
         versionName = "1.0"
 
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner = "com.example.myapplication.CustomTestRunner"
         vectorDrawables {
             useSupportLibrary = true
         }
@@ -126,7 +126,9 @@ dependencies {
     // JVM tests - Hilt
     testImplementation(libs.hilt.android.testing)
     kaptTest(libs.hilt.compiler)
-
+    debugImplementation(composeBom)
+    debugImplementation(libs.androidx.compose.ui.tooling.core)
+    debugImplementation(libs.androidx.compose.ui.test.manifest)
     // Dependencies for Android unit tests
     androidTestImplementation(composeBom)
     androidTestImplementation(libs.junit4)

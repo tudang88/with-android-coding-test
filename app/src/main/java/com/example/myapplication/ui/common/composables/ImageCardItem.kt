@@ -3,6 +3,7 @@ package com.example.myapplication.ui.common.composables
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
@@ -47,9 +48,9 @@ fun ImageCardItem(
     var isFavourite by remember {
         mutableStateOf(user.isFavorite)
     }
-    Box {
+    Box(modifier = modifier) {
         Card(
-            modifier = modifier,
+            modifier = Modifier.fillMaxWidth(),
             elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
         ) {
             AsyncImage(
@@ -69,7 +70,6 @@ fun ImageCardItem(
                 //contentScale =
             )
         }
-
         IconToggleButton(
             checked = isFavourite,
             modifier = Modifier.align(Alignment.TopEnd),

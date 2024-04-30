@@ -20,7 +20,7 @@ import javax.inject.Singleton
 object RepositoryTestModule {
     @Singleton
     @Provides
-    fun provideTasksRepository(): MyDataSource {
+    fun provideMyDataRepository(): MyDataSource {
         return FakeDataRepository()
     }
 }
