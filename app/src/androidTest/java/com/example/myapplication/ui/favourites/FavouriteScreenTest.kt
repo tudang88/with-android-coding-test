@@ -1,12 +1,10 @@
-package com.example.myapplication.ui.details
+package com.example.myapplication.ui.favourites
 
 import androidx.compose.material3.Surface
-import androidx.compose.ui.test.assertIsDisplayed
-import androidx.compose.ui.test.assertIsOff
-import androidx.compose.ui.test.assertIsOn
+import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.isToggleable
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
-import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.performClick
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.MediumTest
@@ -24,14 +22,11 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import javax.inject.Inject
 
-/**
- * Integration test for the Details screen.
- */
 @MediumTest
 @RunWith(AndroidJUnit4::class)
 @HiltAndroidTest
 @ExperimentalCoroutinesApi
-class DetailsScreenTest {
+class FavouriteScreenTest {
     @get:Rule(order = 0)
     var hiltRule = HiltAndroidRule(this)
 
@@ -47,30 +42,40 @@ class DetailsScreenTest {
     }
 
     @Test
-    fun loadDetailScreen() = runTest {
-        // GIVEN: pick a user
-        val user = SAMPLE_USERS[0]
-        // THEN: show screen
-        setContent(user.id)
-        // THEN: The DetailsScreen is display
-        composeTestRule.onNodeWithText(user.nickname).assertIsDisplayed()
-        composeTestRule.onNode(isToggleable()).assertIsOff()
-        // Change Favourite
-        composeTestRule.onNode(isToggleable()).performClick()
-        composeTestRule.onNode(isToggleable()).assertIsOn()
+    fun loadFavouritesScreen_noFavourites() = runTest {
+        // GIVEN:
+        // THEN: show Favourites screen
+        setContent()
+        // THEN: The empty screen is display
+        composeTestRule.onAllNodes(isToggleable()).assertCountEquals(0)
     }
 
+    @Test
+    fun loadFavouritesScreen_SomeFavourites() = runTest {
+        // GIVEN:
+        for (i in 0..2) {
+            repository.markFavourite(SAMPLE_USERS[i].id, true)
+        }
+        // THEN: show Favourites screen
+        setContent()
+        // THEN: The screen is displayed with 3 items inside
+        composeTestRule.onAllNodes(isToggleable()).assertCountEquals(3)
+        // remove one favourite item
+        composeTestRule.onAllNodes(isToggleable()).onFirst().performClick()
+        // THEN: the favourites list will be deducted by one
+        composeTestRule.onAllNodes(isToggleable()).assertCountEquals(2)
+
+    }
     /**
      * The helper function
      * for loading the screen composable
      */
-    private fun setContent(userId: Int) {
+    private fun setContent() {
         composeTestRule.setContent {
             MyApplicationTheme {
                 Surface {
-                    DetailsScreen(
-                        id = userId,
-                        viewModel = DetailsScreenViewModel(repository)
+                    FavouritesScreen(
+                        viewModel = FavouritesScreenViewModel(repository)
                     )
                 }
             }
