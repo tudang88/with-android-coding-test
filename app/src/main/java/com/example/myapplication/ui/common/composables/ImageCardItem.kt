@@ -41,8 +41,6 @@ fun ImageCardItem(
     onItemClicked: (id: Int) -> Unit = {},
     onFavourite: (value: Boolean) -> Unit = {}
 ) {
-    // set test tag
-    modifier.testTag("ImgCard_${user.id}")
     /**
      * favourite status
      */
