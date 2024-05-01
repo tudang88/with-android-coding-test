@@ -53,15 +53,6 @@ fun DetailsScreen(
      */
     uiState.value.user?.let {
         Column {
-            ImageCardItem(
-                it,
-                enableClick = false,
-                modifier = Modifier
-                    .padding(4.dp),
-                onFavourite = { favState ->
-                    viewModel.onFavouriteChange(favState)
-                }
-            )
             Text(
                 text = it.nickname, style = TextStyle(
                     fontSize = 24.sp,
@@ -72,6 +63,16 @@ fun DetailsScreen(
                 ),
                 modifier = Modifier.fillMaxWidth()
             )
+            ImageCardItem(
+                it,
+                enableClick = false,
+                modifier = Modifier
+                    .padding(4.dp),
+                onFavourite = { favState ->
+                    viewModel.onFavouriteChange(favState)
+                }
+            )
+
         }
     }
 }

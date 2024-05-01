@@ -2,6 +2,7 @@ package com.example.myapplication.ui.master
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -15,6 +16,7 @@ import com.example.myapplication.ui.navigation.AppNavigationActions
 import com.example.myapplication.ui.navigation.AppNavigationGraph
 import com.example.myapplication.ui.theme.MyApplicationTheme
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MasterScreen(
     viewModel: MasterScreenViewModel = hiltViewModel(),
@@ -37,7 +39,7 @@ fun MasterScreen(
 
     Scaffold(
         topBar = {
-            buildTopAppBar(navActions, topBarState) {
+            BuildTopAppBar(navActions, topBarState) {
                 // propagate action button event
                 viewModel.onShareEvent()
             }

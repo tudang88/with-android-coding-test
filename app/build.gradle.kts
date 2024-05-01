@@ -1,6 +1,6 @@
 plugins {
-    alias(libs.plugins.androidApplication)
-    alias(libs.plugins.kotlinAndroid)
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kapt)
     alias(libs.plugins.ksp)
     alias(libs.plugins.hilt)
@@ -12,33 +12,20 @@ android {
 
     defaultConfig {
         applicationId = "com.example.myapplication"
-        minSdk = 24
-        targetSdk = 34
+        minSdk = libs.versions.minSdk.get().toInt()
+        targetSdk = libs.versions.targetSdk.get().toInt()
         versionCode = 1
         versionName = "1.0"
 
         testInstrumentationRunner = "com.example.myapplication.CustomTestRunner"
-        vectorDrawables {
-            useSupportLibrary = true
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments += "room.incremental" to "true"
+            }
         }
     }
 
-    buildTypes {
-        release {
-            isMinifyEnabled = false
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
-        }
-    }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
-    }
-    kotlinOptions {
-        jvmTarget = "1.8"
-    }
     // Always show the result of every unit test, even if it passes.
     testOptions.unitTests {
         isIncludeAndroidResources = true
@@ -57,61 +44,87 @@ android {
             }
         }
     }
+
     buildFeatures {
-        viewBinding = true
         compose = true
-        buildConfig = true
     }
-    packaging {
-        resources {
-            excludes += "/META-INF/{AL2.0,LGPL2.1}"
-        }
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
+    kotlinOptions {
+        jvmTarget = "17"
+    }
+
+    packagingOptions {
+        excludes += "META-INF/AL2.0"
+        excludes += "META-INF/LGPL2.1"
+    }
+
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.7"
+        kotlinCompilerExtensionVersion = libs.versions.androidxComposeCompiler.get()
+    }
+
+    tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
+        kotlinOptions {
+            freeCompilerArgs += "-opt-in=kotlin.RequiresOptIn"
+            freeCompilerArgs += "-opt-in=kotlin.Experimental"
+        }
     }
 }
 
+/*
+ Dependency versions are defined in the top level build.gradle file. This helps keeping track of
+ all versions in a single place. This improves readability and helps managing project complexity.
+ */
 dependencies {
-    implementation(libs.core.ktx)
-    implementation(libs.lifecycle.runtime.ktx)
-    implementation(libs.androidx.lifecycle.runtime.compose)
-    implementation(libs.activity.compose)
-    // Jetpack Compose
-    val composeBom = platform(libs.compose.bom)
-    implementation(composeBom)
+
+    // App dependencies
     implementation(libs.ui)
     implementation(libs.ui.graphics)
     implementation(libs.ui.tooling.preview)
     implementation(libs.material3)
+    implementation(libs.androidx.annotation)
+    implementation(libs.kotlinx.coroutines.android)
+    implementation(libs.timber)
+    implementation(libs.androidx.test.espresso.idling.resources)
 
-    // Dependency Injection
-    implementation(libs.hilt)
-    implementation(libs.hilt.navigation.compose)
-    ksp(libs.hilt.compiler)
-
-    // Navigation
-    implementation(libs.navigation.compose)
-
-    // Networking
-    implementation(libs.retrofit)
-    implementation(libs.retrofit.moshi.converter)
-    implementation(libs.retrofit.logging.interceptor)
-
-    // Json
-    implementation(libs.moshi)
-    ksp(libs.moshi.codegen)
-
-    // Image loading
-    implementation(libs.coil)
-
-    // ROOM
-    implementation(libs.room)
+    // Architecture Components
+    implementation(libs.room.runtime)
     implementation(libs.room.ktx)
     ksp(libs.room.compiler)
+    implementation(libs.androidx.lifecycle.runtimeCompose)
+    implementation(libs.androidx.lifecycle.viewModelCompose)
+    implementation(libs.androidx.lifecycle.runtimeCompose)
+
+    // Hilt
+    implementation(libs.hilt.android.core)
+    implementation(libs.androidx.hilt.navigation.compose)
+    kapt(libs.hilt.compiler)
+
+    // Jetpack Compose
+    val composeBom = platform(libs.androidx.compose.bom)
+
+    implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.compose.compiler)
+    implementation(composeBom)
+    implementation(libs.androidx.compose.foundation.core)
+    implementation(libs.androidx.compose.foundation.layout)
+    implementation(libs.androidx.compose.animation)
+    implementation(libs.androidx.compose.material.core)
+    implementation(libs.androidx.compose.ui.tooling.preview)
+    implementation(libs.androidx.navigation.compose)
+    implementation(libs.androidx.lifecycle.runtimeCompose)
+    implementation(libs.androidx.lifecycle.viewModelCompose)
+    implementation(libs.accompanist.appcompat.theme)
+    implementation(libs.accompanist.swiperefresh)
+
+    debugImplementation(composeBom)
+    debugImplementation(libs.androidx.compose.ui.tooling.core)
+    debugImplementation(libs.androidx.compose.ui.test.manifest)
 
     // Dependencies for local unit tests
-    testImplementation(libs.junit)
     testImplementation(composeBom)
     testImplementation(libs.junit4)
     testImplementation(libs.androidx.archcore.testing)
@@ -123,21 +136,16 @@ dependencies {
     testImplementation(libs.androidx.test.espresso.intents)
     testImplementation(libs.google.truth)
     testImplementation(libs.androidx.compose.ui.test.junit)
+
     // JVM tests - Hilt
     testImplementation(libs.hilt.android.testing)
     kaptTest(libs.hilt.compiler)
-    debugImplementation(composeBom)
-    debugImplementation(libs.androidx.compose.ui.tooling.core)
-    debugImplementation(libs.androidx.compose.ui.test.manifest)
+
     // Dependencies for Android unit tests
     androidTestImplementation(composeBom)
     androidTestImplementation(libs.junit4)
     androidTestImplementation(libs.kotlinx.coroutines.test)
     androidTestImplementation(libs.androidx.compose.ui.test.junit)
-
-    androidTestImplementation(libs.androidx.test.ext.junit)
-    androidTestImplementation(libs.espresso.core)
-    androidTestImplementation(libs.ui.test.junit4)
 
     // AndroidX Test - JVM testing
     testImplementation(libs.androidx.test.core.ktx)
@@ -162,35 +170,15 @@ dependencies {
     // AndroidX Test - Hilt testing
     androidTestImplementation(libs.hilt.android.testing)
     kaptAndroidTest(libs.hilt.compiler)
-//    debugImplementation(libs.ui.tooling)
-//    debugImplementation(libs.ui.test.manifest)
+    // Networking
+    implementation(libs.retrofit)
+    implementation(libs.retrofit.moshi.converter)
+    implementation(libs.retrofit.logging.interceptor)
 
+    // Json
+    implementation(libs.moshi)
+    ksp(libs.moshi.codegen)
 
-
-
-
-
-
-    // AndroidX Test - JVM testing
-    testImplementation(libs.androidx.test.core.ktx)
-    testImplementation(libs.androidx.test.ext)
-    testImplementation(libs.androidx.test.rules)
-    testImplementation(project(":shared-test"))
-
-    // AndroidX Test - Instrumented testing
-    androidTestImplementation(libs.androidx.test.core.ktx)
-    androidTestImplementation(libs.androidx.test.ext)
-    androidTestImplementation(libs.androidx.test.rules)
-    androidTestImplementation(libs.room.testing)
-    androidTestImplementation(libs.androidx.archcore.testing)
-    androidTestImplementation(libs.androidx.navigation.testing)
-    androidTestImplementation(libs.androidx.test.espresso.core)
-    androidTestImplementation(libs.androidx.test.espresso.contrib)
-    androidTestImplementation(libs.androidx.test.espresso.intents)
-    androidTestImplementation(libs.androidx.test.espresso.idling.resources)
-    androidTestImplementation(libs.androidx.test.espresso.idling.concurrent)
-    androidTestImplementation(project(":shared-test"))
-
-    // AndroidX Test - Hilt testing
-    androidTestImplementation(libs.hilt.android.testing)
+    // Image loading
+    implementation(libs.coil)
 }

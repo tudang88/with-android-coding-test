@@ -1,10 +1,9 @@
 package com.example.myapplication.ui.master
 
-import android.util.Log
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.ThumbUp
 import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material.icons.outlined.Home
@@ -27,6 +26,7 @@ import com.example.myapplication.R
 import com.example.myapplication.common.Constants
 import com.example.myapplication.ui.navigation.AppNavigationActions
 import com.example.myapplication.ui.navigation.Screen
+import timber.log.Timber
 
 /**
  * configuration for TopAppBar
@@ -73,7 +73,7 @@ fun AppBarAndBottomBarState.screenTransition(dest: String): AppBarAndBottomBarSt
 
     return destinationMap[dest]
         ?: AppBarAndBottomBarState(
-            Icons.AutoMirrored.Filled.ArrowBack,
+            Icons.Default.KeyboardArrowLeft,
             TopBarTitle.Details.toString(),
             ActionMenuType.ShareMenu,
             false,
@@ -127,7 +127,7 @@ fun CreateActionMenu(
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun buildTopAppBar(
+fun BuildTopAppBar(
     navActions: AppNavigationActions,
     appBarState: AppBarAndBottomBarState,
     onShareButtonClicked: () -> Unit
@@ -144,16 +144,14 @@ fun buildTopAppBar(
                 enableClick = appBarState.enableClick,
                 onNavigationIconClick = {
                     when (appBarState.navIcon) {
-                        Icons.AutoMirrored.Filled.ArrowBack -> {
+                        Icons.Default.KeyboardArrowLeft -> {
                             // back stack
                             navActions.navigateBack()
                         }
 
                         else -> {
-                            Log.e(
-                                Constants.LOG_TAG_COMMON,
-                                "Unsupported event on Navigation Button"
-                            )
+                            Timber.tag(Constants.LOG_TAG_COMMON)
+                                .e("Unsupported event on Navigation Button")
                         }
                     }
                 })
@@ -209,6 +207,7 @@ val navigationItems = listOf(
 /**
  * BottomBar helper function
  */
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun buildBottomBar(
     items: List<BottomNavigationItem>,
@@ -231,10 +230,8 @@ fun buildBottomBar(
                         Screen.HomeScreen.route -> navActions.navigateToHome()
                         Screen.FavouriteScreen.route -> navActions.navigateToFavourites()
                         else -> {
-                            Log.e(
-                                Constants.LOG_TAG_COMMON,
-                                "unknown supported route ${item.route}"
-                            )
+                            Timber.tag(Constants.LOG_TAG_COMMON)
+                                .e("unknown supported route %s", item.route)
                         }
                     }
                 },

@@ -25,10 +25,10 @@ import javax.inject.Inject
 /**
  * Integration test for the Details screen.
  */
-//@MediumTest
-//@RunWith(AndroidJUnit4::class)
-//@HiltAndroidTest
-//@ExperimentalCoroutinesApi
+@MediumTest
+@RunWith(AndroidJUnit4::class)
+@HiltAndroidTest
+@ExperimentalCoroutinesApi
 class DetailsScreenTest {
     @get:Rule(order = 0)
     var hiltRule = HiltAndroidRule(this)
@@ -44,7 +44,7 @@ class DetailsScreenTest {
         hiltRule.inject()
     }
 
-//    @Test
+    @Test
     fun loadDetailScreen() = runTest {
         // GIVEN: pick a user
         val user = SAMPLE_USERS[0]
