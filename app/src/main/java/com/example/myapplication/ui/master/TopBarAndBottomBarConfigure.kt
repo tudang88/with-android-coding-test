@@ -21,6 +21,7 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 
 import com.example.myapplication.R
 import com.example.myapplication.common.Constants
@@ -178,7 +179,7 @@ fun BuildTopAppBar(
  */
 data class BottomNavigationItem(
     val route: String,
-    val title: String,
+    val stringResId: Int,
     val selectedIcon: ImageVector,
     val unselectedIcon: ImageVector,
     val hasBadge: Boolean = false
@@ -190,14 +191,14 @@ data class BottomNavigationItem(
 val navigationItems = listOf(
     BottomNavigationItem(
         Screen.HomeScreen.route,
-        "Home",
+        R.string.home_tab,
         Icons.Filled.Home,
         Icons.Outlined.Home,
         false
     ),
     BottomNavigationItem(
         Screen.FavouriteScreen.route,
-        "Favourite",
+        R.string.fav_tab,
         Icons.Filled.Favorite,
         Icons.Outlined.FavoriteBorder,
         true
@@ -221,7 +222,7 @@ fun buildBottomBar(
             NavigationBarItem(
                 selected = selectedIndex == index,
                 label = {
-                    Text(text = item.title)
+                    Text(text = stringResource(id = item.stringResId))
                 },
                 onClick = {
                     onSelectedIndex(index)
@@ -249,7 +250,8 @@ fun buildBottomBar(
                         Icon(
                             imageVector = if (index == selectedIndex) {
                                 item.selectedIcon
-                            } else item.unselectedIcon, contentDescription = item.title
+                            } else item.unselectedIcon,
+                            contentDescription = stringResource(id = item.stringResId)
                         )
                     }
                 },
