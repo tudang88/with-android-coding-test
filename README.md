@@ -14,6 +14,11 @@
 * UIレイヤ
   * 画面(compose関数): UIを実装する
   * ViewModel:各画面に対して、画面の状態を管理するViewModelクラスとなります。
+  * 画面一覧
+    * MasterScreen: トップバーおよびナビゲーションバーを持つ画面、またアプリナビゲーションをホストする画面
+    * HomeScreen: 画像一覧を表示する画面
+    * FavouritesScreen:お気に入り一覧を表示する画面
+    * DetailsScreen:各Userの詳細画面
 * Dataレイヤ
   * repository: UIレイヤからみられるデータ集約ポイントとして動いています。
   * LocalDatabase: APIやりとりの頻度を控えるために、ローカルCacheとして動いています。また、Single Source of Truthとして設計されおり、常に、UIに表示するデータは、このデータベースからとなります。
@@ -35,7 +40,6 @@
 * Instrumentedテスト: Androidフレームワークのクラスなどが必要なケース。エミュレータまたは、実機が必要
   * UIテスト
   * アプリナビゲーションテスト
-テストソースは、
 ## 4.2 テストソース
 * ローカルテスト: app/src/testに格納されます
 * Instrumentedテスト: app/src/androidTestに格納されます。
