@@ -1,1 +1,6 @@
+# Ignore everything
 /build
+.gradle/
+.idea/
+*.patch
+local.properties
