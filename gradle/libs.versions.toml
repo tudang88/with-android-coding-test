@@ -30,6 +30,7 @@ targetSdk = "33"
 truth = "1.1.2"
 retrofit-logging-interceptor = "4.12.0"
 moshi = "1.14.0"
+kotest = "5.6.0"
 
 [libraries]
 accompanist-appcompat-theme = { group = "com.google.accompanist", name = "accompanist-appcompat-theme", version.ref = "accompanist" }
@@ -82,7 +83,9 @@ coil = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
 ui = { group = "androidx.compose.ui", name = "ui" }
 ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
 ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
-
+kotest-runner-junit5 = {group = "io.kotest", name = "kotest-runner-junit5", version.ref = "kotest"}
+kotest-assertions-core = {group = "io.kotest", name = "kotest-assertions-core", version.ref = "kotest"}
+kotest-property = {group = "io.kotest", name = "kotest-property", version.ref = "kotest"}
 [plugins]
 android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
 android-library = { id = "com.android.library", version.ref = "androidGradlePlugin" }
