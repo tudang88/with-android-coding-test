@@ -8,7 +8,7 @@ plugins {
 
 android {
     namespace = "com.example.myapplication.shared.test"
-    compileSdk = 33
+    compileSdk = 34
     defaultConfig {
         minSdk = 24
     }
@@ -31,6 +31,7 @@ dependencies {
     implementation(libs.androidx.test.rules)
     implementation(libs.hilt.android.core)
     implementation(libs.hilt.android.testing)
+    implementation(libs.junit.jupiter.api)
     kapt(libs.hilt.compiler)
 
     // Room

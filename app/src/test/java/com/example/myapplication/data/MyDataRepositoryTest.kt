@@ -1,7 +1,6 @@
 package com.example.myapplication.data
 
-
-import com.example.myapplication.MainCoroutineRule
+import com.example.myapplication.MainCoroutineRule5
 import com.example.myapplication.common.SAMPLE_LOCAL_DATA
 import com.example.myapplication.common.SAMPLE_NETWORK_DATA
 import com.example.myapplication.common.SAMPLE_USERS
@@ -14,12 +13,15 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
-import org.junit.Before
-import org.junit.Rule
-import org.junit.Test
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtendWith
+import org.junit.jupiter.api.extension.RegisterExtension
 
 @ExperimentalCoroutinesApi
+@ExtendWith(MainCoroutineRule5::class)
 class MyDataRepositoryTest {
+
     // Test dependencies
     private lateinit var networkDataSource: NetworkDataSource
     private lateinit var localDataSource: LocalDbDao
@@ -27,15 +29,14 @@ class MyDataRepositoryTest {
     private var testDispatcher = UnconfinedTestDispatcher()
 
     // set the main coroutines dispatcher for unit testing
-    @ExperimentalCoroutinesApi
-    @get:Rule
-    val mainCoroutineRule = MainCoroutineRule()
+    @JvmField
+    @RegisterExtension
+    val mainCoroutineRule = MainCoroutineRule5()
 
     // target test module
     private lateinit var dataRepository: MyDataRepository
 
-    @ExperimentalCoroutinesApi
-    @Before
+    @BeforeEach
     fun setUp() {
         networkDataSource = FakeRemoteDataSource(SAMPLE_NETWORK_DATA.toMutableList())
         // start with empty database
@@ -60,7 +61,6 @@ class MyDataRepositoryTest {
         // Then: all the data from network will be stored in local database
         assertThat(localDataSource.observeAll().first()).hasSize(SAMPLE_NETWORK_DATA.size)
         assertThat(dataRepository.getAllCurrentItems().first()).hasSize(SAMPLE_NETWORK_DATA.size)
-
     }
 
     @Test
@@ -110,7 +110,7 @@ class MyDataRepositoryTest {
     }
 
     @Test
-    fun getUserById_returnExpectedUserFromLocalDb() = runTest() {
+    fun getUserById_returnExpectedUserFromLocalDb() = runTest {
         // Given: database already have item
         localDataSource.insertAll(SAMPLE_LOCAL_DATA)
         // When: get one user by Id
@@ -141,6 +141,5 @@ class MyDataRepositoryTest {
         dataRepository.emitShareEvent(false)
         val evenFlag2 = dataRepository.observeShareEven().first()
         assertThat(evenFlag2).isFalse()
-
     }
 }

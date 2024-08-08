@@ -29,8 +29,8 @@ android {
     // Always show the result of every unit test, even if it passes.
     testOptions.unitTests {
         isIncludeAndroidResources = true
-
         all { test ->
+            test.useJUnitPlatform()
             with(test) {
                 testLogging {
                     events = setOf(
@@ -72,6 +72,7 @@ android {
             freeCompilerArgs += "-opt-in=kotlin.Experimental"
         }
     }
+
 }
 
 /*
@@ -124,12 +125,20 @@ dependencies {
     debugImplementation(libs.androidx.compose.ui.tooling.core)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
 
+    // Junit5
+    // JUnit 5 dependencies
+    testImplementation(libs.junit.jupiter.api)
+    testRuntimeOnly(libs.junit.jupiter.engine)
+
+    // For Kotlin test support
+    testImplementation(libs.kotlin.test.junit5)
+
+    // If using coroutines testing
+    testImplementation(libs.kotlinx.coroutines.test)
     // Dependencies for local unit tests
     testImplementation(composeBom)
-    testImplementation(libs.junit4)
     testImplementation(libs.androidx.archcore.testing)
     testImplementation(libs.kotlinx.coroutines.android)
-    testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.androidx.navigation.testing)
     testImplementation(libs.androidx.test.espresso.core)
     testImplementation(libs.androidx.test.espresso.contrib)
