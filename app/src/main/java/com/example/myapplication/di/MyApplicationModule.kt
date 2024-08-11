@@ -8,6 +8,7 @@ import com.example.myapplication.data.MyDataSource
 import com.example.myapplication.data.local.LocalDatabase
 import com.example.myapplication.data.local.LocalDbDao
 import com.example.myapplication.data.network.NetworkDataSource
+import com.example.myapplication.data.network.NetworkLogger
 import com.example.myapplication.data.network.RemoteNetworkDataSource
 import com.example.myapplication.networking.UserProfileApi
 import dagger.Binds
@@ -47,7 +48,7 @@ class MyApplicationModule {
     @Provides
     @Singleton
     fun retrofit(): Retrofit {
-        val httpClient = OkHttpClient.Builder().build()
+        val httpClient = OkHttpClient.Builder().addInterceptor(NetworkLogger()).build()
         return Retrofit.Builder()
             .baseUrl(Constants.BASE_URL)
             .addConverterFactory(MoshiConverterFactory.create())
