@@ -1,6 +1,6 @@
 package com.example.myapplication.ui.master
 
-import com.example.myapplication.MainCoroutineRule
+import com.example.myapplication.MainCoroutineRule5
 import com.example.myapplication.common.SAMPLE_USERS
 import com.example.myapplication.data.FakeDataRepository
 import com.example.myapplication.ui.navigation.Screen
@@ -11,12 +11,13 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
-import org.junit.Before
-import org.junit.Rule
-import org.junit.Test
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.extension.ExtendWith
+import kotlin.test.Test
 
 
 @ExperimentalCoroutinesApi
+@ExtendWith(MainCoroutineRule5::class)
 class MasterScreenViewModelTest {
     // test target
     private lateinit var masterScreenViewModel: MasterScreenViewModel
@@ -24,12 +25,7 @@ class MasterScreenViewModelTest {
     // use a fake repository to be injected into the viewmodel
     private lateinit var dataRepository: FakeDataRepository
 
-    // set the main coroutines dispatcher for unit testing
-    @ExperimentalCoroutinesApi
-    @get:Rule
-    val mainCoroutineRule = MainCoroutineRule()
-
-    @Before
+    @BeforeEach
     fun setUp() {
         // init repository
         dataRepository = FakeDataRepository()
@@ -46,7 +42,7 @@ class MasterScreenViewModelTest {
 
         // Then: uiState should reflect the transition on it appBarState
         val appBarState = masterScreenViewModel.uiState.first().appBarState
-        assertThat(appBarState).isEqualTo(appBarState.screenTransition(targetScreen))
+        assertThat(appBarState).isEqualTo(screenTransition(targetScreen))
     }
 
     @Test
@@ -59,7 +55,7 @@ class MasterScreenViewModelTest {
 
         // Then: uiState should reflect the transition on it appBarState
         val appBarState = masterScreenViewModel.uiState.first().appBarState
-        assertThat(appBarState).isEqualTo(appBarState.screenTransition(targetScreen))
+        assertThat(appBarState).isEqualTo(screenTransition(targetScreen))
     }
 
     @Test
@@ -75,7 +71,7 @@ class MasterScreenViewModelTest {
 
         // Then: uiState should reflect the transition on it appBarState
         val appBarState = masterScreenViewModel.uiState.first().appBarState
-        assertThat(appBarState).isEqualTo(appBarState.screenTransition(targetScreen))
+        assertThat(appBarState).isEqualTo(screenTransition(targetScreen))
     }
 
     @Test
@@ -89,7 +85,7 @@ class MasterScreenViewModelTest {
         masterScreenViewModel.onScreenTransition(targetScreen)
         // Then: uiState should reflect the transition on it appBarState
         val appBarState = masterScreenViewModel.uiState.first().appBarState
-        assertThat(appBarState).isEqualTo(appBarState.screenTransition(targetScreen))
+        assertThat(appBarState).isEqualTo(screenTransition(targetScreen))
     }
 
     @Test
@@ -103,7 +99,7 @@ class MasterScreenViewModelTest {
         masterScreenViewModel.onScreenTransition(targetScreen)
         // Then: uiState should reflect the transition on it appBarState
         val appBarState = masterScreenViewModel.uiState.first().appBarState
-        assertThat(appBarState).isEqualTo(appBarState.screenTransition(targetScreen))
+        assertThat(appBarState).isEqualTo(screenTransition(targetScreen))
     }
 
     @Test

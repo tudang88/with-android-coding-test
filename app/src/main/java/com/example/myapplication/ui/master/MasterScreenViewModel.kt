@@ -64,7 +64,7 @@ class MasterScreenViewModel @Inject constructor(
      * change TopAppBar
      */
     fun onScreenTransition(dest: String) {
-        _topBarState.value = _topBarState.value.screenTransition(dest)
+        _topBarState.value = screenTransition(dest)
     }
 
     /**

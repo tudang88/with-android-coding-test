@@ -1,16 +1,17 @@
 package com.example.myapplication.ui.home
 
-import com.example.myapplication.MainCoroutineRule
+import com.example.myapplication.MainCoroutineRule5
 import com.example.myapplication.data.FakeDataRepository
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
-import org.junit.Before
-import org.junit.Rule
-import org.junit.Test
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.extension.ExtendWith
+import kotlin.test.Test
 
 @ExperimentalCoroutinesApi
+@ExtendWith(MainCoroutineRule5::class)
 class HomeScreenViewModelTest {
     // test target
     private lateinit var homeScreenViewModel: HomeScreenViewModel
@@ -18,12 +19,7 @@ class HomeScreenViewModelTest {
     // use a fake repository to be injected into the viewmodel
     private lateinit var dataRepository: FakeDataRepository
 
-    // set the main coroutines dispatcher for unit testing
-    @ExperimentalCoroutinesApi
-    @get:Rule
-    val mainCoroutineRule = MainCoroutineRule()
-
-    @Before
+    @BeforeEach
     fun setUp() {
         // init repository
         dataRepository = FakeDataRepository()
@@ -56,7 +52,5 @@ class HomeScreenViewModelTest {
         homeScreenViewModel.onFavouriteChange(items[0].id, false)
         val favList2 = dataRepository.getAllFavorites().first().toList()
         assertThat(favList2).hasSize(0)
-
-
     }
 }

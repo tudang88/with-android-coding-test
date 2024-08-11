@@ -16,7 +16,6 @@ import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
-import org.junit.jupiter.api.extension.RegisterExtension
 
 @ExperimentalCoroutinesApi
 @ExtendWith(MainCoroutineRule5::class)
@@ -27,11 +26,6 @@ class MyDataRepositoryTest {
     private lateinit var localDataSource: LocalDbDao
 
     private var testDispatcher = UnconfinedTestDispatcher()
-
-    // set the main coroutines dispatcher for unit testing
-    @JvmField
-    @RegisterExtension
-    val mainCoroutineRule = MainCoroutineRule5()
 
     // target test module
     private lateinit var dataRepository: MyDataRepository

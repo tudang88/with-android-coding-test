@@ -58,7 +58,7 @@ data class AppBarAndBottomBarState(
  * Top Bar And Bottom Bar
  * state
  */
-fun AppBarAndBottomBarState.screenTransition(dest: String): AppBarAndBottomBarState {
+fun screenTransition(dest: String): AppBarAndBottomBarState {
     val destinationMap = mapOf(
         Screen.HomeScreen.route to AppBarAndBottomBarState(
             Icons.Filled.Home,

@@ -1,6 +1,7 @@
 package com.example.myapplication.ui.favourites
 
 import com.example.myapplication.MainCoroutineRule
+import com.example.myapplication.MainCoroutineRule5
 import com.example.myapplication.common.SAMPLE_USERS
 import com.example.myapplication.data.FakeDataRepository
 import com.google.common.truth.Truth.assertThat
@@ -9,11 +10,12 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
-import org.junit.Before
-import org.junit.Rule
-import org.junit.Test
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.extension.ExtendWith
+import kotlin.test.Test
 
 @ExperimentalCoroutinesApi
+@ExtendWith(MainCoroutineRule5::class)
 class FavouritesScreenViewModelTest {
     // test target
     private lateinit var favouritesScreenViewModel: FavouritesScreenViewModel
@@ -21,12 +23,7 @@ class FavouritesScreenViewModelTest {
     // use a fake repository to be injected into the viewmodel
     private lateinit var dataRepository: FakeDataRepository
 
-    // set the main coroutines dispatcher for unit testing
-    @ExperimentalCoroutinesApi
-    @get:Rule
-    val mainCoroutineRule = MainCoroutineRule()
-
-    @Before
+    @BeforeEach
     fun setUp() {
         // init repository
         dataRepository = FakeDataRepository()
