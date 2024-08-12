@@ -1,6 +1,6 @@
 package com.example.myapplication.ui.master
 
-import com.example.myapplication.MainCoroutineRule5
+import com.example.myapplication.MainCoroutineRuleJUnit5
 import com.example.myapplication.common.SAMPLE_USERS
 import com.example.myapplication.data.FakeDataRepository
 import com.example.myapplication.ui.navigation.Screen
@@ -17,7 +17,7 @@ import kotlin.test.Test
 
 
 @ExperimentalCoroutinesApi
-@ExtendWith(MainCoroutineRule5::class)
+@ExtendWith(MainCoroutineRuleJUnit5::class)
 class MasterScreenViewModelTest {
     // test target
     private lateinit var masterScreenViewModel: MasterScreenViewModel

@@ -1,6 +1,6 @@
 package com.example.myapplication.ui.details
 
-import com.example.myapplication.MainCoroutineRule5
+import com.example.myapplication.MainCoroutineRuleJUnit5
 import com.example.myapplication.common.SAMPLE_USERS
 import com.example.myapplication.data.FakeDataRepository
 import com.google.common.truth.Truth.assertThat
@@ -16,7 +16,7 @@ import kotlin.test.Test
 
 
 @ExperimentalCoroutinesApi
-@ExtendWith(MainCoroutineRule5::class)
+@ExtendWith(MainCoroutineRuleJUnit5::class)
 class DetailsScreenViewModelTest {
     // test target
     private lateinit var detailsScreenViewModel: DetailsScreenViewModel    // use a fake repository to be injected into the viewmodel

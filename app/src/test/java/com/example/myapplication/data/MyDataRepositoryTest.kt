@@ -1,6 +1,6 @@
 package com.example.myapplication.data
 
-import com.example.myapplication.MainCoroutineRule5
+import com.example.myapplication.MainCoroutineRuleJUnit5
 import com.example.myapplication.common.SAMPLE_LOCAL_DATA
 import com.example.myapplication.common.SAMPLE_NETWORK_DATA
 import com.example.myapplication.common.SAMPLE_USERS
@@ -18,7 +18,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 
 @ExperimentalCoroutinesApi
-@ExtendWith(MainCoroutineRule5::class)
+@ExtendWith(MainCoroutineRuleJUnit5::class)
 class MyDataRepositoryTest {
 
     // Test dependencies

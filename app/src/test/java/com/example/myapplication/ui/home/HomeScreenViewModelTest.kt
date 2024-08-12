@@ -1,6 +1,6 @@
 package com.example.myapplication.ui.home
 
-import com.example.myapplication.MainCoroutineRule5
+import com.example.myapplication.MainCoroutineRuleJUnit5
 import com.example.myapplication.data.FakeDataRepository
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -11,7 +11,7 @@ import org.junit.jupiter.api.extension.ExtendWith
 import kotlin.test.Test
 
 @ExperimentalCoroutinesApi
-@ExtendWith(MainCoroutineRule5::class)
+@ExtendWith(MainCoroutineRuleJUnit5::class)
 class HomeScreenViewModelTest {
     // test target
     private lateinit var homeScreenViewModel: HomeScreenViewModel

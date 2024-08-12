@@ -1,7 +1,6 @@
 package com.example.myapplication.ui.favourites
 
-import com.example.myapplication.MainCoroutineRule
-import com.example.myapplication.MainCoroutineRule5
+import com.example.myapplication.MainCoroutineRuleJUnit5
 import com.example.myapplication.common.SAMPLE_USERS
 import com.example.myapplication.data.FakeDataRepository
 import com.google.common.truth.Truth.assertThat
@@ -15,7 +14,7 @@ import org.junit.jupiter.api.extension.ExtendWith
 import kotlin.test.Test
 
 @ExperimentalCoroutinesApi
-@ExtendWith(MainCoroutineRule5::class)
+@ExtendWith(MainCoroutineRuleJUnit5::class)
 class FavouritesScreenViewModelTest {
     // test target
     private lateinit var favouritesScreenViewModel: FavouritesScreenViewModel
