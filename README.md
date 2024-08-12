@@ -1,4 +1,4 @@
-# With-Android-Coding-Test
+# JetpackCompose and JUnit5 Local Test
 
 # 1. アプリのイントロダクション
 ## 1.1 機能一覧
