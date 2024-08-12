@@ -2,7 +2,6 @@ package com.example.myapplication.data.local
 
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.SmallTest
 import com.example.myapplication.common.SAMPLE_LOCAL_DATA
 import junit.framework.TestCase.assertEquals
@@ -10,12 +9,10 @@ import junit.framework.TestCase.assertNotNull
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
-import org.junit.Before
-import org.junit.Test
-import org.junit.runner.RunWith
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 
 @ExperimentalCoroutinesApi
-@RunWith(AndroidJUnit4::class)
 @SmallTest
 class LocalDbDaoTest {
     // using an in-memory database because the information stored here disappears when the
@@ -23,7 +20,7 @@ class LocalDbDaoTest {
     private lateinit var database: LocalDatabase
 
     // Ensure that we use a new database for each test.
-    @Before
+    @BeforeEach
     fun initDb() {
         database = Room.inMemoryDatabaseBuilder(
             ApplicationProvider.getApplicationContext(),

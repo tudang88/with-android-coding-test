@@ -1,9 +1,12 @@
+import com.android.build.api.dsl.Packaging
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kapt)
     alias(libs.plugins.ksp)
     alias(libs.plugins.hilt)
+    alias(libs.plugins.demanoderus.android.junit5)
 }
 
 android {
@@ -57,11 +60,11 @@ android {
         jvmTarget = "17"
     }
 
-    packagingOptions {
-        excludes += "META-INF/AL2.0"
-        excludes += "META-INF/LGPL2.1"
-        excludes += "META-INF/LICENSE.md"
-        excludes += "META-INF/LICENSE-notice.md"
+    packaging {
+        resources.excludes += "META-INF/AL2.0"
+        resources.excludes += "META-INF/LGPL2.1"
+        resources.excludes += "META-INF/LICENSE.md"
+        resources.excludes += "META-INF/LICENSE-notice.md"
     }
 
     composeOptions {
@@ -154,7 +157,8 @@ dependencies {
 
     // Dependencies for Android unit tests
     androidTestImplementation(composeBom)
-    androidTestImplementation(libs.junit4)
+    // run instrumented test with junit5
+    androidTestImplementation(libs.junit.jupiter.api)
     androidTestImplementation(libs.kotlinx.coroutines.test)
     androidTestImplementation(libs.androidx.compose.ui.test.junit)
 
