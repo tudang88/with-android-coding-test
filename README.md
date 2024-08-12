@@ -1,4 +1,4 @@
-# JetpackCompose and JUnit5 Local Test
+# JetpackCompose and kotest Local Test
 
 # 1. アプリのイントロダクション
 ## 1.1 機能一覧
