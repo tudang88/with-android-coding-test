@@ -17,7 +17,6 @@ import androidx.test.filters.LargeTest
 import com.example.myapplication.HiltTestActivity
 import com.example.myapplication.R
 import com.example.myapplication.data.MyDataSource
-import com.example.myapplication.ui.navigation.AppNavigationGraph
 import com.example.myapplication.ui.theme.MyApplicationTheme
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
