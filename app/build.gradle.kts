@@ -155,6 +155,10 @@ dependencies {
     testImplementation(libs.hilt.android.testing)
     kaptTest(libs.hilt.compiler)
 
+    // kotest framework
+    testImplementation(libs.kotest.runner.junit5)
+    testImplementation(libs.kotest.assertions.core)
+    testImplementation(libs.kotest.property)
     // Dependencies for Android unit tests
     androidTestImplementation(composeBom)
     // run instrumented test with junit5

@@ -1,6 +1,5 @@
 package com.example.myapplication.data
 
-import com.example.myapplication.MainCoroutineRuleJUnit5
 import com.example.myapplication.common.SAMPLE_LOCAL_DATA
 import com.example.myapplication.common.SAMPLE_NETWORK_DATA
 import com.example.myapplication.common.SAMPLE_USERS
@@ -8,30 +7,22 @@ import com.example.myapplication.data.local.FakeLocalDataSource
 import com.example.myapplication.data.local.LocalDbDao
 import com.example.myapplication.data.network.FakeRemoteDataSource
 import com.example.myapplication.data.network.NetworkDataSource
-import com.google.common.truth.Truth.assertThat
+import io.kotest.core.spec.style.FunSpec
+import io.kotest.matchers.shouldBe
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
-import kotlinx.coroutines.test.runTest
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.extension.ExtendWith
 
-@ExperimentalCoroutinesApi
-@ExtendWith(MainCoroutineRuleJUnit5::class)
-class MyDataRepositoryTest {
-
+@OptIn(ExperimentalCoroutinesApi::class)
+class MyDataRepositoryTest : FunSpec({
     // Test dependencies
-    private lateinit var networkDataSource: NetworkDataSource
-    private lateinit var localDataSource: LocalDbDao
-
-    private var testDispatcher = UnconfinedTestDispatcher()
-
+    lateinit var networkDataSource: NetworkDataSource
+    lateinit var localDataSource: LocalDbDao
     // target test module
-    private lateinit var dataRepository: MyDataRepository
-
-    @BeforeEach
-    fun setUp() {
+    lateinit var dataRepository: MyDataRepository
+    val testDispatcher = UnconfinedTestDispatcher()
+    // Before test
+    beforeTest {
         networkDataSource = FakeRemoteDataSource(SAMPLE_NETWORK_DATA.toMutableList())
         // start with empty database
         localDataSource = FakeLocalDataSource(listOf())
@@ -43,97 +34,89 @@ class MyDataRepositoryTest {
         )
     }
 
-    @Test
-    fun refreshData_ReloadFromNetWork_updateDatabase() = runTest {
-        // Given: network source with SAMPLE_NETWORK_DATA
-        assertThat(networkDataSource.getUsersProfile()).hasSize(SAMPLE_NETWORK_DATA.size)
-        // And empty local database
-        assertThat(localDataSource.observeAll().first()).hasSize(0)
-        assertThat(dataRepository.getAllCurrentItems().first()).hasSize(0)
-        // When: perform refresh
-        dataRepository.refresh()
-        // Then: all the data from network will be stored in local database
-        assertThat(localDataSource.observeAll().first()).hasSize(SAMPLE_NETWORK_DATA.size)
-        assertThat(dataRepository.getAllCurrentItems().first()).hasSize(SAMPLE_NETWORK_DATA.size)
-    }
-
-    @Test
-    fun getAllItems_returnItemsAlreadyStoredInDatabase() = runTest {
+    test("getAllItems_returnItemsAlreadyStoredInDatabase") {
         // Given: database already have item
         localDataSource.insertAll(SAMPLE_LOCAL_DATA)
         // When: getAllItems
         val items = dataRepository.getAllCurrentItems().first()
         // Then:
-        assertThat(items).hasSize(SAMPLE_LOCAL_DATA.size)
+        items.size shouldBe SAMPLE_LOCAL_DATA.size
     }
 
-    @Test
-    fun getAllFavorites_someFavourites() = runTest {
+    test("getAllFavorites_someFavourites") {
         // Given: database already have item
         localDataSource.insertAll(SAMPLE_LOCAL_DATA.map { it.copy(isFavorite = true) })
         // When: getAllFavorites
         val favList = dataRepository.getAllFavorites().first()
         // Then:
-        assertThat(favList).hasSize(SAMPLE_LOCAL_DATA.size)
+        favList.size shouldBe SAMPLE_LOCAL_DATA.size
     }
 
-    @Test
-    fun getAllFavorites_noFavourites() = runTest {
+    test("getAllFavorites_noFavourites") {
         // Given: database already have item
         localDataSource.insertAll(SAMPLE_LOCAL_DATA)
         // When: getAllFavorites
         val favList = dataRepository.getAllFavorites().first()
         // Then:
-        assertThat(favList).hasSize(0)
+        favList.size shouldBe 0
     }
 
-    @Test
-    fun markFavourite_updateFavouritesList() = runTest {
+    test("markFavourite_updateFavouritesList") {
         // Given: database already have item
         localDataSource.insertAll(SAMPLE_LOCAL_DATA)
         // When: mark first item as favourite
         dataRepository.markFavourite(SAMPLE_LOCAL_DATA[0].id, true)
         // Then:
         val favList = dataRepository.getAllFavorites().first()
-        assertThat(favList).hasSize(1)
+        favList.size shouldBe 1
         // when: un-mark favourite
         dataRepository.markFavourite(SAMPLE_LOCAL_DATA[0].id, false)
         // Then:
         val favList2 = dataRepository.getAllFavorites().first()
-        assertThat(favList2).hasSize(0)
+        favList2.size shouldBe 0
     }
 
-    @Test
-    fun getUserById_returnExpectedUserFromLocalDb() = runTest {
+    test("getUserById_returnExpectedUserFromLocalDb") {
         // Given: database already have item
         localDataSource.insertAll(SAMPLE_LOCAL_DATA)
         // When: get one user by Id
         val user = dataRepository.getUserById(SAMPLE_USERS[0].id)
         // Then:
-        assertThat(user).isEqualTo(SAMPLE_USERS[0])
+        user shouldBe SAMPLE_USERS[0]
     }
 
-    @Test
-    fun clearDatabase_emptyDatabase() = runTest {
+    test("clearDatabase_emptyDatabase") {
         // Given: refresh repository
         dataRepository.refresh()
-        assertThat(dataRepository.getAllCurrentItems().first()).hasSize(SAMPLE_LOCAL_DATA.size)
+        dataRepository.getAllCurrentItems().first().size shouldBe SAMPLE_LOCAL_DATA.size
         // when: clear data
         dataRepository.clearDatabase()
         // Then:
-        assertThat(dataRepository.getAllCurrentItems().first()).hasSize(0)
+        dataRepository.getAllCurrentItems().first().size shouldBe 0
     }
 
-    @Test
-    fun emitShareEvent_collectResult() = runTest {
+    test("refreshData_ReloadFromNetWork_updateDatabase") {
+        // Given: network source with SAMPLE_NETWORK_DATA
+        networkDataSource.getUsersProfile().size shouldBe SAMPLE_NETWORK_DATA.size
+        // And empty local database
+        localDataSource.observeAll().first().size shouldBe 0
+        dataRepository.getAllCurrentItems().first().size shouldBe 0
+        // When: perform refresh
+        dataRepository.refresh()
+        // Then: all the data from network will be stored in local database
+        localDataSource.observeAll().first().size shouldBe SAMPLE_NETWORK_DATA.size
+        dataRepository.getAllCurrentItems().first().size shouldBe SAMPLE_NETWORK_DATA.size
+    }
+
+    test("emitShareEvent_collectResult") {
         // Given:
         // When : emit event
         dataRepository.emitShareEvent(true)
         val evenFlag = dataRepository.observeShareEven().first()
-        assertThat(evenFlag).isTrue()
+        evenFlag shouldBe true
         // when : clear event
         dataRepository.emitShareEvent(false)
         val evenFlag2 = dataRepository.observeShareEven().first()
-        assertThat(evenFlag2).isFalse()
+        evenFlag2 shouldBe false
     }
-}
+})
