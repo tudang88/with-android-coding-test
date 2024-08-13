@@ -1,38 +1,39 @@
 package com.example.myapplication.ui.details
 
-import com.example.myapplication.MainCoroutineRuleJUnit5
 import com.example.myapplication.common.SAMPLE_USERS
 import com.example.myapplication.data.FakeDataRepository
-import com.google.common.truth.Truth.assertThat
+import io.kotest.core.coroutines.backgroundScope
+import io.kotest.core.spec.style.FunSpec
+import io.kotest.matchers.shouldBe
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
-import kotlinx.coroutines.test.runTest
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.extension.ExtendWith
-import kotlin.test.Test
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.setMain
 
-
-@ExperimentalCoroutinesApi
-@ExtendWith(MainCoroutineRuleJUnit5::class)
-class DetailsScreenViewModelTest {
+@OptIn(ExperimentalCoroutinesApi::class)
+class DetailsScreenViewModelTest : FunSpec({
     // test target
-    private lateinit var detailsScreenViewModel: DetailsScreenViewModel    // use a fake repository to be injected into the viewmodel
-    private lateinit var dataRepository: FakeDataRepository
+    lateinit var detailsScreenViewModel: DetailsScreenViewModel    // use a fake repository to be injected into the viewmodel
+    lateinit var dataRepository: FakeDataRepository
 
-    @BeforeEach
-    fun setUp() {
+    // setup
+    beforeTest {
+        Dispatchers.setMain(UnconfinedTestDispatcher())
         // init repository
         dataRepository = FakeDataRepository()
         detailsScreenViewModel = DetailsScreenViewModel(dataRepository)
     }
 
-    @Test
-    fun selectUserById_showDetails() = runTest {
+    afterTest {
+        Dispatchers.resetMain()
+    }
+    test("selectUserById_showDetails").config(coroutineTestScope = true) {
         // Create an empty collector for the StateFlow
-        backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
+        backgroundScope.launch(UnconfinedTestDispatcher()) {
             detailsScreenViewModel.uiState.collect()
         }
         // Given: repository already have a list of USER
@@ -41,14 +42,26 @@ class DetailsScreenViewModelTest {
         detailsScreenViewModel.getUserDetails(SAMPLE_USERS[0].id)
         // Then: UI should be reflected the expected User
         val user = detailsScreenViewModel.uiState.value.user
-        assertThat(user).isEqualTo(SAMPLE_USERS[0])
+        user shouldBe SAMPLE_USERS[0]
 
     }
 
-    @Test
-    fun onFavouriteChange() = runTest {
+    test("getShareEvent_updateFlag") {
+        // Given: DetailScreen has already displayed
+        // When: a share event come
+        dataRepository.emitShareEvent(true)
+        // Then: the event is transferred to viewModel layer
+        val shareFlag = detailsScreenViewModel.shareEvent.first()
+        shareFlag shouldBe true
+        // clear event
+        detailsScreenViewModel.clearShareEvent()
+        val shareFlagClear = detailsScreenViewModel.shareEvent.first()
+        shareFlagClear shouldBe false
+    }
+
+    test("onFavouriteChange").config(coroutineTestScope = true) {
         // Create an empty collector for the StateFlow
-        backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
+        backgroundScope.launch(UnconfinedTestDispatcher()) {
             detailsScreenViewModel.uiState.collect()
         }
         // Given: A user has already displayed
@@ -60,28 +73,13 @@ class DetailsScreenViewModelTest {
         // And the state of DetailsScreen
         val isFav = detailsScreenViewModel.uiState.value.isFav
         val favList = dataRepository.getAllFavorites().first()
-        assertThat(favList.contains(SAMPLE_USERS[0].copy(isFavorite = true))).isTrue()
-        assertThat(isFav).isTrue()
+        favList.contains(SAMPLE_USERS[0].copy(isFavorite = true)) shouldBe true
+        isFav shouldBe true
         // PART-2: un-mark favourite
         detailsScreenViewModel.onFavouriteChange(false)
         val favList2 = dataRepository.getAllFavorites().first()
         val isFav2 = detailsScreenViewModel.uiState.value.isFav
-        assertThat(favList2.contains(SAMPLE_USERS[0].copy(isFavorite = true))).isFalse()
-        assertThat(isFav2).isFalse()
+        favList2.contains(SAMPLE_USERS[0].copy(isFavorite = true)) shouldBe false
+        isFav2 shouldBe false
     }
-
-    @Test
-    fun getShareEvent_updateFlag() = runTest {
-        // Given: DetailScreen has already displayed
-        // When: a share event come
-        dataRepository.emitShareEvent(true)
-        // Then: the event is transferred to viewModel layer
-        val shareFlag = detailsScreenViewModel.shareEvent.first()
-        assertThat(shareFlag).isTrue()
-        // clear event
-        detailsScreenViewModel.clearShareEvent()
-        val shareFlagClear = detailsScreenViewModel.shareEvent.first()
-        assertThat(shareFlagClear).isFalse()
-    }
-
-}
+})
