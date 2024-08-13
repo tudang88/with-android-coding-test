@@ -1,43 +1,45 @@
 package com.example.myapplication.ui.home
 
-import com.example.myapplication.MainCoroutineRuleJUnit5
 import com.example.myapplication.data.FakeDataRepository
-import com.google.common.truth.Truth.assertThat
+import io.kotest.core.spec.style.FunSpec
+import io.kotest.matchers.shouldBe
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.test.runTest
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.extension.ExtendWith
-import kotlin.test.Test
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.setMain
 
-@ExperimentalCoroutinesApi
-@ExtendWith(MainCoroutineRuleJUnit5::class)
-class HomeScreenViewModelTest {
+@OptIn(ExperimentalCoroutinesApi::class)
+class HomeScreenViewModelTest : FunSpec({
     // test target
-    private lateinit var homeScreenViewModel: HomeScreenViewModel
+    lateinit var homeScreenViewModel: HomeScreenViewModel
 
     // use a fake repository to be injected into the viewmodel
-    private lateinit var dataRepository: FakeDataRepository
+    lateinit var dataRepository: FakeDataRepository
 
-    @BeforeEach
-    fun setUp() {
+    // setup
+    beforeTest {
+        Dispatchers.setMain(UnconfinedTestDispatcher())
         // init repository
         dataRepository = FakeDataRepository()
         homeScreenViewModel = HomeScreenViewModel(dataRepository)
     }
 
-    @Test
-    fun loadHomeScreen_showAllItems() = runTest {
+    afterTest {
+        Dispatchers.resetMain()
+    }
+
+    test("loadHomeScreen_showAllItems").config(coroutineTestScope = true) {
         // Given: the app was started up
         // When: the HomeScreen is shown
         // Then: All items should be shown
         val items = homeScreenViewModel.uiState.value.items
         val itemsFromRepository = dataRepository.getAllCurrentItems().first().toList()
-        assertThat(items).isEqualTo(itemsFromRepository)
+        items shouldBe itemsFromRepository
     }
 
-    @Test
-    fun markItemAsFavourites_updateFavouritesList() = runTest {
+    test("markItemAsFavourites_updateFavouritesList").config(coroutineTestScope = true) {
 
         // Given: HomeScreen is shown
         val items = homeScreenViewModel.uiState.value.items
@@ -46,11 +48,11 @@ class HomeScreenViewModelTest {
         homeScreenViewModel.onFavouriteChange(items[0].id, true)
         // Then: the favourite items list should be updated
         val favList1 = dataRepository.getAllFavorites().first().toList()
-        assertThat(items[0].id).isEqualTo(favList1[0].id)
+        items[0].id shouldBe favList1[0].id
         // Part-2: un-mark favourite
         // when: remove favourite of the above item
         homeScreenViewModel.onFavouriteChange(items[0].id, false)
         val favList2 = dataRepository.getAllFavorites().first().toList()
-        assertThat(favList2).hasSize(0)
+        favList2.size shouldBe 0
     }
-}
+})

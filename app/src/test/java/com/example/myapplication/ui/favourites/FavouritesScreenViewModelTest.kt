@@ -1,47 +1,50 @@
 package com.example.myapplication.ui.favourites
 
-import com.example.myapplication.MainCoroutineRuleJUnit5
 import com.example.myapplication.common.SAMPLE_USERS
 import com.example.myapplication.data.FakeDataRepository
-import com.google.common.truth.Truth.assertThat
+import io.kotest.core.coroutines.backgroundScope
+import io.kotest.core.spec.style.FunSpec
+import io.kotest.matchers.shouldBe
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
-import kotlinx.coroutines.test.runTest
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.extension.ExtendWith
-import kotlin.test.Test
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.setMain
 
-@ExperimentalCoroutinesApi
-@ExtendWith(MainCoroutineRuleJUnit5::class)
-class FavouritesScreenViewModelTest {
+@OptIn(ExperimentalCoroutinesApi::class)
+class FavouritesScreenViewModelTest : FunSpec({
     // test target
-    private lateinit var favouritesScreenViewModel: FavouritesScreenViewModel
+    lateinit var favouritesScreenViewModel: FavouritesScreenViewModel
 
     // use a fake repository to be injected into the viewmodel
-    private lateinit var dataRepository: FakeDataRepository
+    lateinit var dataRepository: FakeDataRepository
 
-    @BeforeEach
-    fun setUp() {
+    // setup
+    beforeTest {
+        Dispatchers.setMain(UnconfinedTestDispatcher())
         // init repository
         dataRepository = FakeDataRepository()
         favouritesScreenViewModel = FavouritesScreenViewModel(dataRepository)
     }
 
-    @Test
-    fun loadFavouritesScreen_showNoFavouriteItems() = runTest {
+    // after test clear dispatchers
+    afterTest {
+        Dispatchers.resetMain()
+    }
+
+    test("loadFavouritesScreen_showNoFavouriteItems").config(coroutineTestScope = true) {
         // Given: No Items was marked as favourite
         // When: the FavouritesScreen is shown
         // Then: FavouritesScreen shows no items
         val favList = favouritesScreenViewModel.uiState.value.items
-        assertThat(favList).hasSize(0)
+        favList.size shouldBe 0
     }
 
-    @Test
-    fun loadFavouritesScreen_showAllFavouriteItems() = runTest {
+    test("loadFavouritesScreen_showAllFavouriteItems").config(coroutineTestScope = true) {
         // Create an empty collector for the StateFlow
-        backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
+        backgroundScope.launch(UnconfinedTestDispatcher()) {
             favouritesScreenViewModel.uiState.collect()
         }
         // Given: Some items were marked as favourite
@@ -53,15 +56,13 @@ class FavouritesScreenViewModelTest {
         // When: the FavouritesScreen is shown
         // Then: FavouritesScreen shows all items
         val favList = favouritesScreenViewModel.uiState.value.items
-        assertThat(favList).hasSize(inputFavList.size)
-        assertThat(favList).isEqualTo(inputFavList)
-
+        favList.size shouldBe inputFavList.size
+        favList shouldBe inputFavList
     }
 
-    @Test
-    fun changeFavourite_updateFavouritesList() = runTest {
+    test("changeFavourite_updateFavouritesList").config(coroutineTestScope = true) {
         // Create an empty collector for the StateFlow
-        backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
+        backgroundScope.launch(UnconfinedTestDispatcher()) {
             favouritesScreenViewModel.uiState.collect()
         }
         // Given: Some items were marked as favourite
@@ -78,7 +79,7 @@ class FavouritesScreenViewModelTest {
             favListBefore.drop(1)
         // Then: FavouritesScreen
         val favListAfter = favouritesScreenViewModel.uiState.value.items
-        assertThat(favListAfter).hasSize(expectedList.size)
-        assertThat(favListAfter).isEqualTo(expectedList)
+        favListAfter.size shouldBe expectedList.size
+        favListAfter shouldBe expectedList
     }
-}
+})

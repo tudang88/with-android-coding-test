@@ -1,39 +1,40 @@
 package com.example.myapplication.ui.master
 
-import com.example.myapplication.MainCoroutineRuleJUnit5
 import com.example.myapplication.common.SAMPLE_USERS
 import com.example.myapplication.data.FakeDataRepository
 import com.example.myapplication.ui.navigation.Screen
-import com.google.common.truth.Truth.assertThat
+import io.kotest.core.coroutines.backgroundScope
+import io.kotest.core.spec.style.FunSpec
+import io.kotest.matchers.shouldBe
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
-import kotlinx.coroutines.test.runTest
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.extension.ExtendWith
-import kotlin.test.Test
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.setMain
 
-
-@ExperimentalCoroutinesApi
-@ExtendWith(MainCoroutineRuleJUnit5::class)
-class MasterScreenViewModelTest {
+@OptIn(ExperimentalCoroutinesApi::class)
+class MasterScreenViewModelTest : FunSpec({
     // test target
-    private lateinit var masterScreenViewModel: MasterScreenViewModel
+    lateinit var masterScreenViewModel: MasterScreenViewModel
 
     // use a fake repository to be injected into the viewmodel
-    private lateinit var dataRepository: FakeDataRepository
+    lateinit var dataRepository: FakeDataRepository
 
-    @BeforeEach
-    fun setUp() {
+    beforeTest {
+        Dispatchers.setMain(UnconfinedTestDispatcher())
         // init repository
         dataRepository = FakeDataRepository()
         masterScreenViewModel = MasterScreenViewModel(dataRepository)
     }
 
-    @Test
-    fun onScreenTransition_HomeToFavourite() = runTest {
+    afterTest {
+        Dispatchers.resetMain()
+    }
+
+    test("onScreenTransition_HomeToFavourite").config(coroutineTestScope = true) {
         // Given: the ui state was initialized
         // start from HomeScreen
         // When: transition to Favourite
@@ -42,11 +43,10 @@ class MasterScreenViewModelTest {
 
         // Then: uiState should reflect the transition on it appBarState
         val appBarState = masterScreenViewModel.uiState.first().appBarState
-        assertThat(appBarState).isEqualTo(screenTransition(targetScreen))
+        appBarState shouldBe screenTransition(targetScreen)
     }
 
-    @Test
-    fun onScreenTransition_HomeToDetails() = runTest {
+    test("onScreenTransition_HomeToDetails").config(coroutineTestScope = true) {
         // Given: the ui state was initialized
         // start from HomeScreen
         // When: transition to DetailsScreen
@@ -55,11 +55,10 @@ class MasterScreenViewModelTest {
 
         // Then: uiState should reflect the transition on it appBarState
         val appBarState = masterScreenViewModel.uiState.first().appBarState
-        assertThat(appBarState).isEqualTo(screenTransition(targetScreen))
+        appBarState shouldBe screenTransition(targetScreen)
     }
 
-    @Test
-    fun onScreenTransition_FavouriteToDetails() = runTest {
+    test("onScreenTransition_FavouriteToDetails").config(coroutineTestScope = true) {
         // Given: the ui state was initialized
         // start from FavouriteScreen
         val startScreen = Screen.FavouriteScreen.route
@@ -71,11 +70,10 @@ class MasterScreenViewModelTest {
 
         // Then: uiState should reflect the transition on it appBarState
         val appBarState = masterScreenViewModel.uiState.first().appBarState
-        assertThat(appBarState).isEqualTo(screenTransition(targetScreen))
+        appBarState shouldBe screenTransition(targetScreen)
     }
 
-    @Test
-    fun onScreenTransition_DetailsToHome() = runTest {
+    test("onScreenTransition_DetailsToHome").config(coroutineTestScope = true) {
         // Given: the ui state was initialized
         // start from Details
         val startScreen = Screen.DetailsScreen.route
@@ -85,11 +83,10 @@ class MasterScreenViewModelTest {
         masterScreenViewModel.onScreenTransition(targetScreen)
         // Then: uiState should reflect the transition on it appBarState
         val appBarState = masterScreenViewModel.uiState.first().appBarState
-        assertThat(appBarState).isEqualTo(screenTransition(targetScreen))
+        appBarState shouldBe screenTransition(targetScreen)
     }
 
-    @Test
-    fun onScreenTransition_DetailsToFavourites() = runTest {
+    test("onScreenTransition_DetailsToFavourites").config(coroutineTestScope = true) {
         // Given: the ui state was initialized
         // start from Details
         val startScreen = Screen.DetailsScreen.route
@@ -99,36 +96,33 @@ class MasterScreenViewModelTest {
         masterScreenViewModel.onScreenTransition(targetScreen)
         // Then: uiState should reflect the transition on it appBarState
         val appBarState = masterScreenViewModel.uiState.first().appBarState
-        assertThat(appBarState).isEqualTo(screenTransition(targetScreen))
+        appBarState shouldBe screenTransition(targetScreen)
     }
 
-    @Test
-    fun onTabSelected_Home() = runTest {
+    test("onTabSelected_Home").config(coroutineTestScope = true) {
         // Given: the ui state was initialized
         // start from HomeScreen
         // When: nothing
         // Then: tab index should be reflected on UiState
         val resultIndex = masterScreenViewModel.uiState.first().bottomTabIndex
-        assertThat(resultIndex).isEqualTo(0)
+        resultIndex shouldBe 0
     }
 
-    @Test
-    fun onTabSelected_Favourites() = runTest {
+    test("onTabSelected_Favourites").config(coroutineTestScope = true) {
         // Given: the ui state was initialized
         // start from HomeScreen
         // When: select FavouriteTab
         masterScreenViewModel.onTabSelected(1)
         // Then: tab index should be reflected on UiState
         val resultIndex = masterScreenViewModel.uiState.first().bottomTabIndex
-        assertThat(resultIndex).isEqualTo(1)
+        resultIndex shouldBe 1
     }
 
-    @Test
-    fun updateFavourites_changeFavouriteBadge() = runTest {
+    test("updateFavourites_changeFavouriteBadge").config(coroutineTestScope = true) {
         // Given: the ui state was initialized
         // start from HomeScreen with no favourite mark
         // Create an empty collector for the StateFlow
-        backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
+        backgroundScope.launch(UnconfinedTestDispatcher()) {
             masterScreenViewModel.uiState.collect()
         }
         // Part -1
@@ -139,7 +133,7 @@ class MasterScreenViewModelTest {
         }
         // Then: favourite Count should reflect the change from repository
         val favCount1 = masterScreenViewModel.uiState.value.favCount
-        assertThat(favCount1).isEqualTo(expected)
+        favCount1 shouldBe expected
 
         // Part -2
         // When: remove all favourites items
@@ -148,6 +142,6 @@ class MasterScreenViewModelTest {
         }
         // Then: favourite Count should reflect the change from repository
         val favCount2 = masterScreenViewModel.uiState.value.favCount
-        assertThat(favCount2).isEqualTo(0)
+        favCount2 shouldBe 0
     }
-}
+})
