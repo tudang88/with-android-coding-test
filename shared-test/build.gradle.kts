@@ -33,7 +33,10 @@ dependencies {
     implementation(libs.hilt.android.testing)
     implementation(libs.junit.jupiter.api)
     kapt(libs.hilt.compiler)
-
+    // kotest framework
+    implementation(libs.kotest.runner.junit5)
+    implementation(libs.kotest.assertions.core)
+    implementation(libs.kotest.property)
     // Room
     implementation(libs.room.runtime)
     implementation(libs.room.ktx)

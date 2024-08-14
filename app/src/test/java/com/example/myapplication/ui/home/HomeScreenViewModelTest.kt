@@ -1,17 +1,14 @@
 package com.example.myapplication.ui.home
 
+import com.example.myapplication.CustomInstantExecutorExtension
+import com.example.myapplication.CustomTestRunnerExtension
 import com.example.myapplication.data.FakeDataRepository
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.test.UnconfinedTestDispatcher
-import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.setMain
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class HomeScreenViewModelTest : FunSpec({
+    extensions(CustomTestRunnerExtension(), CustomInstantExecutorExtension())
     // test target
     lateinit var homeScreenViewModel: HomeScreenViewModel
 
@@ -20,14 +17,9 @@ class HomeScreenViewModelTest : FunSpec({
 
     // setup
     beforeTest {
-        Dispatchers.setMain(UnconfinedTestDispatcher())
         // init repository
         dataRepository = FakeDataRepository()
         homeScreenViewModel = HomeScreenViewModel(dataRepository)
-    }
-
-    afterTest {
-        Dispatchers.resetMain()
     }
 
     test("loadHomeScreen_showAllItems").config(coroutineTestScope = true) {

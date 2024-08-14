@@ -1,22 +1,22 @@
 package com.example.myapplication.ui.master
 
+import com.example.myapplication.CustomInstantExecutorExtension
+import com.example.myapplication.CustomTestRunnerExtension
 import com.example.myapplication.common.SAMPLE_USERS
 import com.example.myapplication.data.FakeDataRepository
 import com.example.myapplication.ui.navigation.Screen
 import io.kotest.core.coroutines.backgroundScope
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
-import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.setMain
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class MasterScreenViewModelTest : FunSpec({
+    extensions(CustomTestRunnerExtension(), CustomInstantExecutorExtension())
     // test target
     lateinit var masterScreenViewModel: MasterScreenViewModel
 
@@ -24,14 +24,9 @@ class MasterScreenViewModelTest : FunSpec({
     lateinit var dataRepository: FakeDataRepository
 
     beforeTest {
-        Dispatchers.setMain(UnconfinedTestDispatcher())
         // init repository
         dataRepository = FakeDataRepository()
         masterScreenViewModel = MasterScreenViewModel(dataRepository)
-    }
-
-    afterTest {
-        Dispatchers.resetMain()
     }
 
     test("onScreenTransition_HomeToFavourite").config(coroutineTestScope = true) {

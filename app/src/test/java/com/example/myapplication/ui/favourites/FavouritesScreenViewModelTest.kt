@@ -1,20 +1,20 @@
 package com.example.myapplication.ui.favourites
 
+import com.example.myapplication.CustomInstantExecutorExtension
+import com.example.myapplication.CustomTestRunnerExtension
 import com.example.myapplication.common.SAMPLE_USERS
 import com.example.myapplication.data.FakeDataRepository
 import io.kotest.core.coroutines.backgroundScope
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
-import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.setMain
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class FavouritesScreenViewModelTest : FunSpec({
+    extensions(CustomTestRunnerExtension(), CustomInstantExecutorExtension())
     // test target
     lateinit var favouritesScreenViewModel: FavouritesScreenViewModel
 
@@ -23,15 +23,9 @@ class FavouritesScreenViewModelTest : FunSpec({
 
     // setup
     beforeTest {
-        Dispatchers.setMain(UnconfinedTestDispatcher())
         // init repository
         dataRepository = FakeDataRepository()
         favouritesScreenViewModel = FavouritesScreenViewModel(dataRepository)
-    }
-
-    // after test clear dispatchers
-    afterTest {
-        Dispatchers.resetMain()
     }
 
     test("loadFavouritesScreen_showNoFavouriteItems").config(coroutineTestScope = true) {

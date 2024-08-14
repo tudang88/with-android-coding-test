@@ -1,36 +1,32 @@
 package com.example.myapplication.ui.details
 
+import com.example.myapplication.CustomInstantExecutorExtension
+import com.example.myapplication.CustomTestRunnerExtension
 import com.example.myapplication.common.SAMPLE_USERS
 import com.example.myapplication.data.FakeDataRepository
 import io.kotest.core.coroutines.backgroundScope
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
-import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.setMain
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class DetailsScreenViewModelTest : FunSpec({
+    extensions(CustomTestRunnerExtension(), CustomInstantExecutorExtension())
     // test target
     lateinit var detailsScreenViewModel: DetailsScreenViewModel    // use a fake repository to be injected into the viewmodel
     lateinit var dataRepository: FakeDataRepository
 
     // setup
     beforeTest {
-        Dispatchers.setMain(UnconfinedTestDispatcher())
         // init repository
         dataRepository = FakeDataRepository()
         detailsScreenViewModel = DetailsScreenViewModel(dataRepository)
     }
 
-    afterTest {
-        Dispatchers.resetMain()
-    }
     test("selectUserById_showDetails").config(coroutineTestScope = true) {
         // Create an empty collector for the StateFlow
         backgroundScope.launch(UnconfinedTestDispatcher()) {
