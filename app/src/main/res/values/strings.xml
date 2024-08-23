@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">My Application</string>
+    <string name="app_name">MyApplication</string>
     <string name="title_activity_user_profile">UserProfileActivity</string>
     <string name="user_photo">User photo</string>
     <string name="home_tab">Home</string>

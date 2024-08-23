@@ -1,4 +1,5 @@
 pluginManagement {
+    includeBuild("build-logic")
     repositories {
         google()
         mavenCentral()
@@ -13,6 +14,8 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "My Application"
+rootProject.name = "MyApplication"
 include(":app")
 include(":shared-test")
+
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")

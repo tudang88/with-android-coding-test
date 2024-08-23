@@ -37,6 +37,8 @@ truth = "1.1.2"
 retrofit-logging-interceptor = "4.12.0"
 moshi = "1.14.0"
 kotest = "5.6.0"
+androidDesugarJdkLibs = "2.0.4"
+spotless = "6.11.0"
 
 [libraries]
 accompanist-appcompat-theme = { group = "com.google.accompanist", name = "accompanist-appcompat-theme", version.ref = "accompanist" }
@@ -96,6 +98,13 @@ ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview
 kotest-runner-junit5 = {group = "io.kotest", name = "kotest-runner-junit5", version.ref = "kotest"}
 kotest-assertions-core = {group = "io.kotest", name = "kotest-assertions-core", version.ref = "kotest"}
 kotest-property = {group = "io.kotest", name = "kotest-property", version.ref = "kotest"}
+androidGradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "androidGradlePlugin" }
+kotlinGradlePlugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
+spotlessGradlePlugin = { group = "com.diffplug.spotless", name = "spotless-plugin-gradle", version.ref = "spotless" }
+androidDesugarJdkLibs = { group = "com.android.tools", name = "desugar_jdk_libs", version.ref = "androidDesugarJdkLibs" }
+daggerHiltAndroid = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
+daggerHiltAndroidCompiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hilt" }
+hiltGradlePlugin = { group = "com.google.dagger", name = "hilt-android-gradle-plugin", version.ref = "hilt" }
 [plugins]
 android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
 android-library = { id = "com.android.library", version.ref = "androidGradlePlugin" }
