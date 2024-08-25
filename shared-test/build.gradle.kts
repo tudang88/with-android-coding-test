@@ -22,7 +22,7 @@ android {
 }
 
 dependencies {
-    implementation(project(":app"))
+    implementation(projects.app)
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.kotlinx.coroutines.test)
     implementation(libs.junit4)

@@ -65,6 +65,8 @@ android {
         resources.excludes += "META-INF/LGPL2.1"
         resources.excludes += "META-INF/LICENSE.md"
         resources.excludes += "META-INF/LICENSE-notice.md"
+        resources.excludes += "META-INF/licenses/ASM"
+        resources.excludes += "**/attach_hotspot_windows.dll"
     }
 
     composeOptions {
@@ -170,7 +172,7 @@ dependencies {
     testImplementation(libs.androidx.test.core.ktx)
     testImplementation(libs.androidx.test.ext)
     testImplementation(libs.androidx.test.rules)
-    testImplementation(project(":shared-test"))
+    testImplementation(projects.sharedTest)
 
     // AndroidX Test - Instrumented testing
     androidTestImplementation(libs.androidx.test.core.ktx)
@@ -184,7 +186,7 @@ dependencies {
     androidTestImplementation(libs.androidx.test.espresso.intents)
     androidTestImplementation(libs.androidx.test.espresso.idling.resources)
     androidTestImplementation(libs.androidx.test.espresso.idling.concurrent)
-    androidTestImplementation(project(":shared-test"))
+    androidTestImplementation(projects.sharedTest)
 
     // AndroidX Test - Hilt testing
     androidTestImplementation(libs.hilt.android.testing)
