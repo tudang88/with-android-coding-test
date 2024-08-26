@@ -1,5 +1,3 @@
-import com.android.build.api.dsl.Packaging
-
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -50,6 +48,7 @@ android {
 
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 
     compileOptions {
@@ -60,13 +59,14 @@ android {
         jvmTarget = "17"
     }
 
-    packaging {
-        resources.excludes += "META-INF/AL2.0"
-        resources.excludes += "META-INF/LGPL2.1"
-        resources.excludes += "META-INF/LICENSE.md"
-        resources.excludes += "META-INF/LICENSE-notice.md"
-        resources.excludes += "META-INF/licenses/ASM"
-        resources.excludes += "**/attach_hotspot_windows.dll"
+    packagingOptions {
+        exclude("META-INF/AL2.0")
+        exclude("META-INF/LGPL2.1")
+        exclude("META-INF/LICENSE.md")
+        exclude("META-INF/LICENSE-notice.md")
+        exclude("META-INF/licenses/ASM")
+        exclude("**/attach_hotspot_windows.dll")
+        exclude("win32-x86-64/attach_hotspot_windows.dll")
     }
 
     composeOptions {
