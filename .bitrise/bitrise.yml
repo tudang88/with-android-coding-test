@@ -36,7 +36,7 @@ workflows:
     - sign-apk@1:
         run_if: '{{getenv "BITRISEIO_ANDROID_KEYSTORE_URL" | ne ""}}'
     - deploy-to-bitrise-io@2: {}
-  run_tests:
+  on_pr_checks:
     summary: Run your Android unit tests and get the test report.
     description: The workflow will first clone your Git repository, cache your Gradle
       dependencies, install Android tools, run your Android unit tests and save the
@@ -71,6 +71,6 @@ app:
     VARIANT: debug
 trigger_map:
 - push_branch: main-kotest
-  workflow: run_tests
+  workflow: on_pr_checks
 - pull_request_source_branch: "*"
-  workflow: run_tests
+  workflow: on_pr_checks
