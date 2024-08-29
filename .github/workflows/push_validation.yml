@@ -6,11 +6,15 @@ on:
       - main
       - main-kotest
       - main-junit5
+    paths-ignore:
+      - 'bitrise.yml'
   pull_request:
     branches:
       - main
       - main-kotest
       - main-junit5
+    paths-ignore:
+      - 'bitrise.yml'
 
 jobs:
   build:
