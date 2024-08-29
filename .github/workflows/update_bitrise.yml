@@ -1,0 +1,30 @@
+name: Update Bitrise Configuration
+
+on:
+  push:
+    paths:
+      - 'bitrise.yml'
+    branches:
+      - main-kotest
+
+jobs:
+  update-bitrise:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+
+    - name: Install Bitrise CLI
+      run: |
+        curl -fL https://github.com/bitrise-io/bitrise/releases/download/1.47.0/bitrise-$(uname -s)-$(uname -m) > /usr/local/bin/bitrise
+        chmod +x /usr/local/bin/bitrise
+
+    - name: Authenticate with Bitrise
+      run: |
+        bitrise setup --minimal
+        bitrise auth activate --api-token "${{ secrets.BITRISE_TOKEN}}"
+
+    - name: Sync bitrise.yml
+      run: |
+        bitrise trigger --config bitrise.yml
