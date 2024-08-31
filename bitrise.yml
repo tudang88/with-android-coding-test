@@ -78,7 +78,7 @@ trigger_map:
 - pull_request_source_branch: "*"
   workflow: on_pr_checks
 - type: tag
-  tag: "release_*"
+  tag: release_*
   push_branch: main-kotest
   workflow: build_apk
 
