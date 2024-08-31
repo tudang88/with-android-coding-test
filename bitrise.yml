@@ -10,7 +10,7 @@ workflows:
       tools, set the project's version code based on the build number, run Android
       lint and unit tests, build the project's APK file and save it.
     steps:
-    - git-clone@8: {}
+    - git-clone: {}
     - install-missing-android-tools@3:
         inputs:
         - gradlew_path: "$PROJECT_LOCATION/gradlew"
@@ -76,7 +76,6 @@ trigger_map:
 - type: tag
   tag: "release_*"
   workflow: build_apk
-  push_branch: main-kotest
 - push_branch: main-kotest
   workflow: on_pr_checks
 - pull_request_source_branch: "*"
