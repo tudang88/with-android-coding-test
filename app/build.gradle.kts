@@ -15,8 +15,8 @@ android {
         applicationId = "com.example.myapplication"
         minSdk = libs.versions.minSdk.get().toInt()
         targetSdk = libs.versions.targetSdk.get().toInt()
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = libs.versions.appVersionCode.get().toInt()  // Convert to integer if needed
+        versionName = libs.versions.appVersionName.get()
 
         testInstrumentationRunner = "com.example.myapplication.CustomTestRunner"
 

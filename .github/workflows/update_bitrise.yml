@@ -6,7 +6,8 @@ on:
       - 'bitrise.yml'
     branches:
       - main-kotest
-
+env:
+  - BITRISE_TOKEN: ${{ secrets.BITRISE_TOKEN }}
 jobs:
   update-bitrise:
     runs-on: ubuntu-latest
