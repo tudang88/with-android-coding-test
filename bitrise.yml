@@ -75,6 +75,7 @@ app:
 trigger_map:
 - type: tag
   tag: "*"
+  push_branch: main-kotest
   workflow: build_apk
 - push_branch: main-kotest
   workflow: on_pr_checks
