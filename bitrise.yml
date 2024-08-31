@@ -17,9 +17,9 @@ workflows:
           - content: |
               #!/bin/bash
               set -e
-              
+
               # Fetch all tags from the remote repository
-              git fetch --tags
+              git fetch --all --tags
     - install-missing-android-tools@3:
         inputs:
         - gradlew_path: "$PROJECT_LOCATION/gradlew"
