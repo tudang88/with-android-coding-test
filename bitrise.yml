@@ -74,9 +74,9 @@ app:
 #=======================
 trigger_map:
 - type: tag
-  tag: "*"
-  push_branch: main-kotest
+  tag: "release_*"
   workflow: build_apk
+  push_branch: main-kotest
 - push_branch: main-kotest
   workflow: on_pr_checks
 - pull_request_source_branch: "*"
