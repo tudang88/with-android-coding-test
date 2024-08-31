@@ -12,7 +12,7 @@ workflows:
     steps:
     - git-clone@8: 
         inputs:
-          - fetch_tags: yes
+          - fetch_tags: "yes"
     - install-missing-android-tools@3:
         inputs:
         - gradlew_path: "$PROJECT_LOCATION/gradlew"
