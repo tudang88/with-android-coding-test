@@ -10,16 +10,9 @@ workflows:
       tools, set the project's version code based on the build number, run Android
       lint and unit tests, build the project's APK file and save it.
     steps:
-    - git-clone@8: {}
-    - script:
-        title: Fetch All Tags
+    - git-clone@8: 
         inputs:
-          - content: |
-              #!/bin/bash
-              set -e
-
-              # Fetch all tags from the remote repository
-              git fetch --all --tags
+          - clone_depth: "0"
     - install-missing-android-tools@3:
         inputs:
         - gradlew_path: "$PROJECT_LOCATION/gradlew"
