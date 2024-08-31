@@ -31,6 +31,7 @@ class MyMainActivity : ComponentActivity() {
     }
 }
 
+// Test build workflow
 @Preview(showBackground = true)
 @Composable
 fun MyAppPreview() {
