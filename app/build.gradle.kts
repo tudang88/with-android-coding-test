@@ -1,8 +1,6 @@
+@Suppress("DSL_SCOPE_VIOLATION")
 plugins {
-    alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.kapt)
-    alias(libs.plugins.ksp)
+    alias(libs.plugins.myprj.android.application)
     alias(libs.plugins.hilt)
     alias(libs.plugins.demanoderus.android.junit5)
 }
@@ -20,11 +18,6 @@ android {
 
         testInstrumentationRunner = "com.example.myapplication.CustomTestRunner"
 
-//        javaCompileOptions {
-//            annotationProcessorOptions {
-//                arguments += "room.incremental" to "true"
-//            }
-//        }
     }
 
     // Always show the result of every unit test, even if it passes.

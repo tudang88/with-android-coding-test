@@ -19,15 +19,6 @@ android {
     kotlinOptions {
         jvmTarget = "17"
     }
-    packagingOptions {
-        exclude("META-INF/AL2.0")
-        exclude("META-INF/LGPL2.1")
-        exclude("META-INF/LICENSE.md")
-        exclude("META-INF/LICENSE-notice.md")
-        exclude("META-INF/licenses/ASM")
-        exclude("**/attach_hotspot_windows.dll")
-        exclude("win32-x86-64/attach_hotspot_windows.dll")
-    }
 }
 
 dependencies {
