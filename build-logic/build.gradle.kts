@@ -18,8 +18,9 @@ dependencies {
 gradlePlugin {
   plugins {
     register("androidApplicationCompose") {
-      id = "example.android.application"
+      id = "myprj.android.application"
       implementationClass = "AndroidApplicationPlugin"
     }
   }
 }
+version = "1.0.0"
