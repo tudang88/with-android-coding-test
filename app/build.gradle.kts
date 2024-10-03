@@ -20,11 +20,11 @@ android {
 
         testInstrumentationRunner = "com.example.myapplication.CustomTestRunner"
 
-        javaCompileOptions {
-            annotationProcessorOptions {
-                arguments += "room.incremental" to "true"
-            }
-        }
+//        javaCompileOptions {
+//            annotationProcessorOptions {
+//                arguments += "room.incremental" to "true"
+//            }
+//        }
     }
 
     // Always show the result of every unit test, even if it passes.
@@ -59,15 +59,15 @@ android {
         jvmTarget = "17"
     }
 
-    packagingOptions {
-        exclude("META-INF/AL2.0")
-        exclude("META-INF/LGPL2.1")
-        exclude("META-INF/LICENSE.md")
-        exclude("META-INF/LICENSE-notice.md")
-        exclude("META-INF/licenses/ASM")
-        exclude("**/attach_hotspot_windows.dll")
-        exclude("win32-x86-64/attach_hotspot_windows.dll")
-    }
+    packaging.resources.excludes += mutableSetOf(
+        "META-INF/AL2.0",
+        "META-INF/LGPL2.1",
+        "META-INF/LICENSE.md",
+        "META-INF/LICENSE-notice.md",
+        "META-INF/licenses/ASM",
+        "**/attach_hotspot_windows.dll",
+        "win32-x86-64/attach_hotspot_windows.dll"
+    )
 
     composeOptions {
         kotlinCompilerExtensionVersion = libs.versions.androidxComposeCompiler.get()
